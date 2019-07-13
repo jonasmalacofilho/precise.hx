@@ -1,0 +1,11 @@
+-lib utest
+-main Main
+
+--each
+
+--interp
+
+--next
+
+--neko main.n
+--cmd neko main.n
