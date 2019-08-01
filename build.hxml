@@ -3,9 +3,9 @@
 
 --each
 
---interp
+--neko main.n
+--cmd neko main.n
 
 --next
 
---neko main.n
---cmd neko main.n
+--interp

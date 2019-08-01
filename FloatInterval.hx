@@ -1,11 +1,13 @@
 import FloatTools.ulp;
 
 /**
+	Rounded interval arithmetic (RIA) for double precision Float numbers
 
-  Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for Computer
-  Aided Design and Manufacturing.  Section 4.8, Rounded interval arithmetic and
-  its implementation.  Available at
-  http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
+	References:
+
+	Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for Computer Aided Design and
+	Manufacturing (Section 4.8).
+	Available at: http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 **/
 abstract FloatInterval(FloatIntervalImpl) {
 	public var lower(get, never):Float;
@@ -31,30 +33,26 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return new FloatInterval({ lo: lower, up: upper });
 	}
 
-	@:from
-	public static function fromFloat(number:Float)
+	@:from public static function fromFloat(number:Float)
 	{
-		return make(number, number);  // FIXME ± 1 ulp?
+		return make(number, number);
 	}
 
-	@:commutative @:op(a + b)
-	public function add(rhs:FloatInterval)
+	@:op(a + b) @:commutative public function add(rhs:FloatInterval)
 	{
 		var lo = this.lo + rhs.lower;
 		var up = this.up + rhs.upper;
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:commutative @:op(a - b)
-	public function sub(rhs:FloatInterval)
+	@:op(a - b) @:commutative public function sub(rhs:FloatInterval)
 	{
 		var lo = this.lo - rhs.upper;
 		var up = this.up - rhs.lower;
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a*b)
-	public function mult(rhs:FloatInterval)
+	@:op(a*b) public function mult(rhs:FloatInterval)
 	{
 		var lo = min(this.lo*rhs.lower, this.lo*rhs.upper,
 				this.up*rhs.lower, this.up*rhs.upper);
@@ -63,8 +61,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a/b)
-	public function div(rhs:FloatInterval)
+	@:op(a/b) public function div(rhs:FloatInterval)
 	{
 		var lo = min(this.lo/rhs.lower, this.lo/rhs.upper,
 				this.up/rhs.lower, this.up/rhs.upper);
