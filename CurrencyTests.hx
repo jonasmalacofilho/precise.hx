@@ -19,14 +19,13 @@ class CurrencyTests extends utest.Test {
 		var interest = 1.005;
 		var sum = min;
 		var i = 0;
-		while (true) {
-			try {
+		try {
+			while (true) {
 				sum = sum*interest + min;
-			} catch (err:Dynamic) {
-				trace('survived $i iterations; last sum: ${sum.mean}±${sum.error}');
-				break;
+				i++;
 			}
-			i++;
+		} catch (err:Dynamic) {
+			trace('survived $i iterations; last sum: ${sum.mean}±${sum.error}');
 		}
 		isTrue(i > 1e3);
 		isTrue(sum.mean > 1e6);
