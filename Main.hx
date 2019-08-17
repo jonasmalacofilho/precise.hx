@@ -5,6 +5,7 @@ class Main {
 
 		runner.addCase(new FloatToolsTests());
 		// runner.addCase(new FloatIntervalTests());
+		runner.addCase(new CurrencyTests());
 
 		utest.ui.Report.create(runner);
 		runner.run();

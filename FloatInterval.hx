@@ -12,6 +12,9 @@ import FloatTools.ulp;
 abstract FloatInterval(FloatIntervalImpl) {
 	public var lower(get, never):Float;
 	public var upper(get, never):Float;
+	public var mean(get, never):Float;
+	public var error(get, never):Float;
+	public var relerror(get, never):Float;
 
 	inline function new(interval)
 	{
@@ -26,6 +29,21 @@ abstract FloatInterval(FloatIntervalImpl) {
 	inline function get_upper()
 	{
 		return this.up;
+	}
+
+	inline function get_mean()
+	{
+		return lower + error;
+	}
+
+	inline function get_error()
+	{
+		return (upper - lower)*.5;
+	}
+
+	inline function get_relerror()
+	{
+		return error/mean;
 	}
 
 	inline public static function make(lower:Float, upper:Float)
