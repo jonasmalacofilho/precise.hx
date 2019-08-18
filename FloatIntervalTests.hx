@@ -1,5 +1,5 @@
 import utest.Assert.*;
-using FloatTools;
+import FloatTools.ulp;
 
 class FloatIntervalTests extends utest.Test {
 	function test_api()
@@ -7,27 +7,36 @@ class FloatIntervalTests extends utest.Test {
 		pass();
 	}
 
-	function test_add_interval()
+	function test_properties()
 	{
-		var a = FloatInterval.make(0.9, 1.1);
-		var b = FloatInterval.fromFloat(3.2);
-		var c = a + b;
-		var d = b + a;
-		trace(1.toBinaryRepr());
-		trace(1e-1022.toBinaryRepr());
-		equals(4.1, c.lower);
-		equals(4.3, c.upper);
-		equals(c.lower, d.lower);
-		equals(c.upper, d.upper);
-		fail("TODO");
+		var a = FloatInterval.make(2, 8);
+		equals(2, a.lower);
+		equals(8, a.upper);
+		equals(5, a.mean);
+		equals(3, a.error);
+		equals(3/5, a.relerror);
 	}
 
-	function test_add_float()
+	function test_add()
 	{
 		var a = FloatInterval.fromFloat(1);
 		var b = FloatInterval.fromFloat(1e-32);
 		var c = a + b;
-		trace(c.lower, c.upper, c.upper - c.lower, c.lower == c.upper);
+		var d = b + a;
+		var e = a + 1e-32;
+		var f = 1. + b;
+		equals(1 + 1e-32 - ulp(1 + 1e-32), c.lower);
+		equals(1 + 1e-32 + ulp(1 + 1e-32), c.upper);
+		equals(c.lower, d.lower);
+		equals(c.lower, d.lower);
+		equals(c.lower, e.lower);
+		equals(c.lower, e.lower);
+		equals(c.lower, f.lower);
+		equals(c.lower, f.lower);
+	}
+
+	function test_sub()
+	{
 		fail("TODO");
 	}
 }

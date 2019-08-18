@@ -4,7 +4,7 @@ class Main {
 		var runner = new utest.Runner();
 
 		runner.addCase(new FloatToolsTests());
-		// runner.addCase(new FloatIntervalTests());
+		runner.addCase(new FloatIntervalTests());
 		runner.addCase(new CurrencyTests());
 
 		utest.ui.Report.create(runner);
