@@ -40,24 +40,30 @@ class FloatTools {
 
 	/**
 		Compute the unit-in-the-last-place (ULP) of a Float
+
+		Definition: if x is a real number that lies between two finite consecutive FP
+		numbers a and b, without being equal to one of them, then ulp (x) = |b−a|,
+		otherwise ulp (x) is the distance between the two finite FP numbers nearest x.
+		Moreover, ulp (NaN) is NaN.
+
+		Muller, Jean-Michel. (2005). On the definition of ulp(x).
+		http://ljk.imag.fr/membres/Carine.Lucas/TPScilab/JMMuller/ulp-toms.pdf
+
+		Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for Computer Aided
+		Design and Manufacturing (Section 4.8.2, algorithm 4.2).
+		http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 	**/
 	public static function ulp(x:Float):Float
 	{
-		if (!Math.isFinite(x))
-			throw 'ulp only defined for finite numbers, but argument is $x';
-
-		/*
-			We use a Bytes object to manipulate the Float in binary; note that
+		/**
+			Use a Bytes object to manipulate the Float in binary; note that
 			Bytes.getDouble assumes little endianess.
 
 			63  62       52  51                                    0
 			[s][  b. exp.  ][               mantissa                ]
-			| SEEEEEEE| EEEEMMMM| MMMMMMMM| ... | MMMMMMMM| MMMMMMMM|
+			| SEEEEEEE| EEEEFFFF| FFFFFFFF| ... | FFFFFFFF| FFFFFFFF|
 			| byte[7] | byte[6] | byte[5] | ... | byte[1] | byte[0] |
-
-			Based on: Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for
-			Computer Aided Design and Manufacturing (Section 4.8.2, algorithm 4.2).
-		*/
+		**/
 		var bytes = toBytes(x, false);
 
 		// isolate the biased exponent, but keep it left (up) shifted by 4 bits
@@ -65,7 +71,10 @@ class FloatTools {
 
 		// ulp = 2^(E)*2^(-52) and 52 << 4 = 0x0340
 		bytes.fill(0, 8, 0);
-		if (exp > 0x0340) {  // normalized ulp
+		if (exp == 0x7ff0) {  // ulp of non finite x
+			// inefficient, but focuses code and performance on the more common paths
+			return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
+		} else if (exp > 0x0340) {  // normal ulp
 			bytes.setUInt16(6, exp - 0x0340);
 		} else if (exp > 0) {  // subnormal ulp, but normal x
 			var e1 = (exp >> 4) - 1;

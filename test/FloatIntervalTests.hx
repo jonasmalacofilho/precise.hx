@@ -3,6 +3,10 @@ import precise.FloatTools.ulp;
 import utest.Assert.*;
 using precise.FloatTools;
 
+/**
+	TODO make(upper, lower)
+	TODO add|sub|mult|div|neg(null)
+**/
 class FloatIntervalTests extends utest.Test {
 	function test_api()
 	{
@@ -24,6 +28,17 @@ class FloatIntervalTests extends utest.Test {
 		b.mean == 3.14;
 		b.error == 0;
 		b.relerror == 0;
+
+		var c = FloatInterval.make(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
+		c.lower == Math.NEGATIVE_INFINITY;
+		c.upper == Math.POSITIVE_INFINITY;
+		Math.isNaN(c.mean);
+		Math.isNaN(c.error);
+		Math.isNaN(c.relerror);
+
+		var d = FloatInterval.fromFloat(Math.NaN);
+		Math.isNaN(c.lower);
+		Math.isNaN(c.upper);
 	}
 
 	function test_add()
@@ -42,6 +57,22 @@ class FloatIntervalTests extends utest.Test {
 		equals(c.upper, e.upper);
 		equals(c.lower, f.lower);
 		equals(c.upper, f.upper);
+
+		var g = a + Math.POSITIVE_INFINITY;
+		equals(Math.POSITIVE_INFINITY, g.lower);
+		equals(Math.POSITIVE_INFINITY, g.upper);
+
+		var h = a + Math.NEGATIVE_INFINITY;
+		equals(Math.NEGATIVE_INFINITY, h.lower);
+		equals(Math.NEGATIVE_INFINITY, h.upper);
+
+		var i = a + Math.NaN;
+		isTrue(Math.isNaN(i.lower));
+		isTrue(Math.isNaN(i.upper));
+
+		var j = FloatInterval.fromFloat(Math.POSITIVE_INFINITY) + Math.NEGATIVE_INFINITY;
+		isTrue(Math.isNaN(j.lower));
+		isTrue(Math.isNaN(j.upper));
 	}
 
 	function test_sub()
@@ -60,6 +91,22 @@ class FloatIntervalTests extends utest.Test {
 		equals(c.upper, e.upper);
 		equals(c.lower, f.lower);
 		equals(c.upper, f.upper);
+
+		var g = a - Math.POSITIVE_INFINITY;
+		equals(Math.NEGATIVE_INFINITY, g.lower);
+		equals(Math.NEGATIVE_INFINITY, g.upper);
+
+		var h = a - Math.NEGATIVE_INFINITY;
+		equals(Math.POSITIVE_INFINITY, h.lower);
+		equals(Math.POSITIVE_INFINITY, h.upper);
+
+		var i = a - Math.NaN;
+		isTrue(Math.isNaN(i.lower));
+		isTrue(Math.isNaN(i.upper));
+
+		var j = FloatInterval.fromFloat(Math.POSITIVE_INFINITY) - Math.POSITIVE_INFINITY;
+		isTrue(Math.isNaN(j.lower));
+		isTrue(Math.isNaN(j.upper));
 	}
 
 	function test_mult()
@@ -78,6 +125,22 @@ class FloatIntervalTests extends utest.Test {
 		equals(c.upper, e.upper);
 		equals(c.lower, f.lower);
 		equals(c.upper, f.upper);
+
+		var g = a*Math.POSITIVE_INFINITY;
+		equals(Math.POSITIVE_INFINITY, g.lower);
+		equals(Math.POSITIVE_INFINITY, g.upper);
+
+		var h = a*Math.NEGATIVE_INFINITY;
+		equals(Math.NEGATIVE_INFINITY, h.lower);
+		equals(Math.NEGATIVE_INFINITY, h.upper);
+
+		var i = a*Math.NaN;
+		isTrue(Math.isNaN(i.lower));
+		isTrue(Math.isNaN(i.upper));
+
+		var j = FloatInterval.fromFloat(0)*Math.POSITIVE_INFINITY;
+		isTrue(Math.isNaN(j.lower));
+		isTrue(Math.isNaN(j.upper));
 	}
 
 	function test_div()
@@ -96,6 +159,30 @@ class FloatIntervalTests extends utest.Test {
 		equals(c.upper, e.upper);
 		equals(c.lower, f.lower);
 		equals(c.upper, f.upper);
+
+		var g = a/Math.POSITIVE_INFINITY;
+		equals(-ulp(0), g.lower);
+		equals(ulp(0), g.upper);
+
+		var h = a/Math.NEGATIVE_INFINITY;
+		equals(-ulp(0), g.lower);
+		equals(ulp(0), g.upper);
+
+		var i = Math.POSITIVE_INFINITY/a;
+		equals(Math.POSITIVE_INFINITY, i.lower);
+		equals(Math.POSITIVE_INFINITY, i.upper);
+
+		var j = Math.NEGATIVE_INFINITY/a;
+		equals(Math.NEGATIVE_INFINITY, j.lower);
+		equals(Math.NEGATIVE_INFINITY, j.upper);
+
+		var k = a/Math.NaN;
+		isTrue(Math.isNaN(k.lower));
+		isTrue(Math.isNaN(k.upper));
+
+		var m = FloatInterval.fromFloat(0)/0;
+		isTrue(Math.isNaN(m.lower));
+		isTrue(Math.isNaN(m.upper));
 	}
 
 	function test_neg()
@@ -104,5 +191,17 @@ class FloatIntervalTests extends utest.Test {
 		var b = -a;
 		equals(-8, b.lower);
 		equals(-2, b.upper);
+
+		var c = -FloatInterval.fromFloat(Math.POSITIVE_INFINITY);
+		equals(Math.NEGATIVE_INFINITY, c.lower);
+		equals(Math.NEGATIVE_INFINITY, c.upper);
+
+		var d = -FloatInterval.fromFloat(Math.NEGATIVE_INFINITY);
+		equals(Math.POSITIVE_INFINITY, d.lower);
+		equals(Math.POSITIVE_INFINITY, d.upper);
+
+		var e = -FloatInterval.fromFloat(Math.NaN);
+		isTrue(Math.isNaN(e.lower));
+		isTrue(Math.isNaN(e.upper));
 	}
 }

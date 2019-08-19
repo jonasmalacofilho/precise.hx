@@ -1,7 +1,12 @@
 import utest.Assert.*;
 using precise.FloatTools;
 
+/**
+	TODO ulp(null)
+**/
 class FloatToolsTests extends utest.Test {
+	static inline var MIN_POSITIVE_SUBNORMAL = 4.9406564584124654e-324;  // 2^-1022 × 2^-52
+
 	function test_show()
 	{
 		equals("0 01111111111 0000000000000000000000000000000000000000000000000000",
@@ -53,6 +58,14 @@ class FloatToolsTests extends utest.Test {
 				(x + ulp).toBinaryRepr());
 		equals("1 00000000000 0000000000000000000000000000000000000000000000000001",
 				(x - ulp).toBinaryRepr());
-		equals(4.9406564584124654e-324, ulp);
+		equals(Math.pow(2, -1022 - 52), ulp);
+		equals(MIN_POSITIVE_SUBNORMAL, ulp);
+	}
+
+	function spec_ulp_of_non_finite()
+	{
+		Math.POSITIVE_INFINITY.ulp() == Math.pow(2, 1023 - 52);
+		Math.NEGATIVE_INFINITY.ulp() == Math.pow(2, 1023 - 52);
+		Math.isNaN(Math.NaN.ulp());
 	}
 }

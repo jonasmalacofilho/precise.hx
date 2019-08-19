@@ -5,11 +5,13 @@ import precise.FloatTools.ulp;
 /**
 	Rounded interval arithmetic (RIA) for double precision Float numbers
 
-	References:
+	TODO pow, sqrt, log
+	TODO trig
+	TODO round
 
 	Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for Computer Aided Design and
 	Manufacturing (Section 4.8).
-	Available at: http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
+	http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 **/
 abstract FloatInterval(FloatIntervalImpl) {
 	public var lower(get, never):Float;
