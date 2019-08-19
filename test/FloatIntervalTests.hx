@@ -97,4 +97,12 @@ class FloatIntervalTests extends utest.Test {
 		equals(c.lower, f.lower);
 		equals(c.upper, f.upper);
 	}
+
+	function test_neg()
+	{
+		var a = FloatInterval.make(2, 8);
+		var b = -a;
+		equals(-8, b.lower);
+		equals(-2, b.upper);
+	}
 }

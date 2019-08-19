@@ -90,6 +90,11 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
+	@:op(-a) public function neg()
+	{
+		return make(-this.up, -this.lo);
+	}
+
 	static function min(x:Float, y:Float, w:Float, z:Float)
 	{
 		var ret = x;
