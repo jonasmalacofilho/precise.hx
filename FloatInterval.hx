@@ -63,10 +63,10 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a - b) @:commutative public function sub(rhs:FloatInterval)
+	@:op(a - b) public static function sub(lhs:FloatInterval, rhs:FloatInterval)
 	{
-		var lo = this.lo - rhs.upper;
-		var up = this.up - rhs.lower;
+		var lo = lhs.lower - rhs.upper;
+		var up = lhs.upper - rhs.lower;
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 

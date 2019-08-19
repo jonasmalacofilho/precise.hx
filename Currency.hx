@@ -1,5 +1,5 @@
 @:forward(upper, lower, mean, error, relerror)
-abstract Currency(FloatInterval) {
+abstract Currency(FloatInterval) to FloatInterval {
 	inline function new(value)
 	{
 		this = value;
@@ -27,9 +27,9 @@ abstract Currency(FloatInterval) {
 		return res;
 	}
 
-	@:op(a - b) @:commutative public function sub(rhs:Currency)
+	@:op(a - b) public static function sub(lhs:Currency, rhs:Currency)
 	{
-		var res = new Currency(this - rhs);
+		var res = new Currency((lhs:FloatInterval) - rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
 		return res;
