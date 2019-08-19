@@ -8,14 +8,21 @@ class FloatIntervalTests extends utest.Test {
 		pass();
 	}
 
-	function test_properties()
+	function spec_properties()
 	{
 		var a = FloatInterval.make(2, 8);
-		equals(2, a.lower);
-		equals(8, a.upper);
-		equals(5, a.mean);
-		equals(3, a.error);
-		equals(3/5, a.relerror);
+		a.lower == 2;
+		a.upper == 8;
+		a.mean == 5;
+		a.error == 3;
+		a.relerror == 3/5;
+
+		var b = FloatInterval.fromFloat(3.14);
+		b.lower == b.upper;
+		b.mean == b.lower;
+		b.mean == 3.14;
+		b.error == 0;
+		b.relerror == 0;
 	}
 
 	function test_add()
