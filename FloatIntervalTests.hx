@@ -28,11 +28,11 @@ class FloatIntervalTests extends utest.Test {
 		equals(1 + 1e-32 - ulp(1 + 1e-32), c.lower);
 		equals(1 + 1e-32 + ulp(1 + 1e-32), c.upper);
 		equals(c.lower, d.lower);
-		equals(c.lower, d.lower);
+		equals(c.upper, d.upper);
 		equals(c.lower, e.lower);
-		equals(c.lower, e.lower);
+		equals(c.upper, e.upper);
 		equals(c.lower, f.lower);
-		equals(c.lower, f.lower);
+		equals(c.upper, f.upper);
 	}
 
 	function test_sub()
