@@ -33,7 +33,7 @@ class FloatIntervalTests extends utest.Test {
 		var c = a + b;
 		var d = b + a;
 		var e = a + 1e-32;
-		var f = 1. + b;
+		var f = 1 + b;
 		equals(1 + 1e-32 - ulp(1 + 1e-32), c.lower);
 		equals(1 + 1e-32 + ulp(1 + 1e-32), c.upper);
 		equals(c.lower, d.lower);
@@ -51,7 +51,7 @@ class FloatIntervalTests extends utest.Test {
 		var c = a - b;
 		var d = b - a;
 		var e = a - 1e-32;
-		var f = 1. - b;
+		var f = 1 - b;
 		equals(1 - 1e-32 - ulp(1 - 1e-32), c.lower);
 		equals(1 - 1e-32 + ulp(1 - 1e-32), c.upper);
 		equals(1e-32 - 1 - ulp(1e-32 - 1), d.lower);
@@ -69,7 +69,7 @@ class FloatIntervalTests extends utest.Test {
 		var c = a*b;
 		var d = b*a;
 		var e = a*1e-32;
-		var f = 1.*b;
+		var f = 1*b;
 		equals(1e-32 - ulp(1e-32), c.lower);
 		equals(1e-32 + ulp(1e-32), c.upper);
 		equals(c.lower, d.lower);
@@ -87,7 +87,7 @@ class FloatIntervalTests extends utest.Test {
 		var c = a/b;
 		var d = b/a;
 		var e = a/1e-32;
-		var f = 1./b;
+		var f = 1/b;
 		equals(1/1e-32 - ulp(1/1e-32), c.lower);
 		equals(1/1e-32 + ulp(1/1e-32), c.upper);
 		equals(1e-32 - ulp(1e-32), d.lower);

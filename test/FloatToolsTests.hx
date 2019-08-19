@@ -45,7 +45,7 @@ class FloatToolsTests extends utest.Test {
 
 	function test_ulp_zero()
 	{
-		var x = 0.;
+		var x = 0;
 		var ulp = x.ulp();
 		equals("0 00000000000 0000000000000000000000000000000000000000000000000000",
 				x.toBinaryRepr());

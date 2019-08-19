@@ -5,10 +5,10 @@ class CurrencyTests extends utest.Test {
 	function test_api()
 	{
 		var min = Currency.parse("998.00");
-		trace((min + 18.).mean, (min + 18.).error);
-		trace((min - 18.).mean, (min - 18.).error);
-		trace((min*18.).mean, (min*18.).error);
-		trace((min/18.).mean, (min/18.).error);
+		trace((min + 18).mean, (min + 18).error);
+		trace((min - 18).mean, (min - 18).error);
+		trace((min*18).mean, (min*18).error);
+		trace((min/18).mean, (min/18).error);
 		pass();
 	}
 
