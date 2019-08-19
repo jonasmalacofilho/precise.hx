@@ -72,7 +72,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a*b) public function mult(rhs:FloatInterval)
+	@:op(a*b) @:commutative public function mult(rhs:FloatInterval)
 	{
 		var lo = min(this.lo*rhs.lower, this.lo*rhs.upper,
 				this.up*rhs.lower, this.up*rhs.upper);
@@ -81,12 +81,12 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a/b) public function div(rhs:FloatInterval)
+	@:op(a/b) public static function div(lhs:FloatInterval, rhs:FloatInterval)
 	{
-		var lo = min(this.lo/rhs.lower, this.lo/rhs.upper,
-				this.up/rhs.lower, this.up/rhs.upper);
-		var up = max(this.lo/rhs.lower, this.lo/rhs.upper,
-				this.up/rhs.lower, this.up/rhs.upper);
+		var lo = min(lhs.lower/rhs.lower, lhs.lower/rhs.upper,
+				lhs.upper/rhs.lower, lhs.upper/rhs.upper);
+		var up = max(lhs.lower/rhs.lower, lhs.lower/rhs.upper,
+				lhs.upper/rhs.lower, lhs.upper/rhs.upper);
 		return make(lo - ulp(lo), up + ulp(up));
 	}
 
