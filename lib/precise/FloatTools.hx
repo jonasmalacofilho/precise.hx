@@ -57,9 +57,6 @@ class FloatTools {
 
 			Based on: Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for
 			Computer Aided Design and Manufacturing (Section 4.8.2, algorithm 4.2).
-
-			TODO test/improve/add unit tests/consider relerr
-			TODO double check subnormal x
 		*/
 		var bytes = toBytes(x, false);
 
