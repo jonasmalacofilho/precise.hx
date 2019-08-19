@@ -1,5 +1,5 @@
 import utest.Assert.*;
-using FloatTools;
+using precise.FloatTools;
 
 class FloatToolsTests extends utest.Test {
 	function test_show()

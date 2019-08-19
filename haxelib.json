@@ -1,0 +1,12 @@
+{
+	"name"         :  "precise",
+	"url"          :  "https://github.com/jonasmalacofilho/precise.hx",
+	"license"      :  "BSD",
+	"tags"         :  ["cross"],
+	"description"  :  "Tools for precise arithmetic",
+	"version"      :  "0.0.1",
+	"classPath"    :  "lib",
+	"releasenote"  :  "Add FloatTools, FloatInterval and Currency",
+	"contributors" :  ["jonasmalacofilho", "protocubo"],
+	"dependencies" :  {}
+}

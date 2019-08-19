@@ -1,3 +1,5 @@
+package precise;
+
 @:forward(upper, lower, mean, error, relerror)
 abstract Currency(FloatInterval) to FloatInterval {
 	inline function new(value)

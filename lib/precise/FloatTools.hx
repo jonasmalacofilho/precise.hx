@@ -1,3 +1,5 @@
+package precise;
+
 class FloatTools {
 	/**
 		Return the binary encoding of a Float in a Bytes object

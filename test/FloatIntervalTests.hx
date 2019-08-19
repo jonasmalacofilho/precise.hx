@@ -1,5 +1,6 @@
+import precise.FloatInterval;
+import precise.FloatTools.ulp;
 import utest.Assert.*;
-import FloatTools.ulp;
 
 class FloatIntervalTests extends utest.Test {
 	function test_api()

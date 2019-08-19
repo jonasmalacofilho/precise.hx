@@ -1,4 +1,6 @@
-import FloatTools.ulp;
+package precise;
+
+import precise.FloatTools.ulp;
 
 /**
 	Rounded interval arithmetic (RIA) for double precision Float numbers

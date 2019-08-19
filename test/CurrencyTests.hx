@@ -1,3 +1,4 @@
+import precise.Currency;
 import utest.Assert.*;
 
 class CurrencyTests extends utest.Test {
