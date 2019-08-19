@@ -7,7 +7,7 @@ class Main {
 		runner.addCase(new FloatIntervalTests());
 		runner.addCase(new CurrencyTests());
 
-		utest.ui.Report.create(runner);
+		utest.ui.Report.create(runner, AlwaysShowSuccessResults, AlwaysShowHeader);
 		runner.run();
 	}
 }
