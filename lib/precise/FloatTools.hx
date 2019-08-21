@@ -70,7 +70,7 @@ class FloatTools {
 		Goldberg (1991).  What every computer scientist should know about floating-point
 		arithmetic.
 
-		Knuth (1997).  The art of computer programming, 3rd edition (section 4.2.2).
+		Knuth (1997).  The art of computer programming, 3rd edition (section 4.2.2.A).
 
 		Muller, Jean-Michel (2005).  On the definition of ulp(x).
 		http://ljk.imag.fr/membres/Carine.Lucas/TPScilab/JMMuller/ulp-toms.pdf

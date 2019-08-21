@@ -9,6 +9,9 @@ import precise.FloatTools.ulp;
 	TODO trig functions
 	TODO round methods
 	TODO null safety
+	TODO consider Knuth's observations
+
+	Knuth (1997).  The art of computer programming, 3rd edition (section 4.2.2.C).
 
 	Patrikalakis, N.; Maekawa, T.; Cho, W (2009).  Shape Interrogation for Computer Aided
 	Design and Manufacturing (Section 4.8).
