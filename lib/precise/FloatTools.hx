@@ -10,7 +10,7 @@ class FloatTools {
 	**/
 	public static function toBytes(x:Float, bigEndian=false):haxe.io.Bytes
 	{
-		/*
+		/**
 			On Neko (!neko_v21):
 
 			 - Bytes.setDouble -> FPHelper._double_bytes
@@ -20,7 +20,7 @@ class FloatTools {
 
 			Note: as of 4.0.0-rc.1+93044746a, neko_v21 doesn't produce working builds,
 			and is currently untestd on upstream.
-		*/
+		**/
 		#if (neko && !neko_v21 && haxe_ver >= 3.2)
 			var data = @:privateAccess haxe.io.FPHelper._double_bytes(x, bigEndian);
 			return haxe.io.Bytes.ofData(untyped data);
@@ -41,6 +41,8 @@ class FloatTools {
 	/**
 		Compute the unit-in-the-last-place (ULP) of a Float
 
+		FIXME defintion doesn't match implementation
+
 		Definition: if x is a real number that lies between two finite consecutive FP
 		numbers a and b, without being equal to one of them, then ulp (x) = |b−a|,
 		otherwise ulp (x) is the distance between the two finite FP numbers nearest x.
@@ -60,7 +62,7 @@ class FloatTools {
 			Bytes.getDouble assumes little endianess.
 
 			63  62       52  51                                    0
-			[s][  b. exp.  ][               mantissa                ]
+			[s][  b. exp.  ][               fraction                ]
 			| SEEEEEEE| EEEEFFFF| FFFFFFFF| ... | FFFFFFFF| FFFFFFFF|
 			| byte[7] | byte[6] | byte[5] | ... | byte[1] | byte[0] |
 		**/
