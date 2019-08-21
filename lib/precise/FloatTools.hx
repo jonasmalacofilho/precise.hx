@@ -41,18 +41,37 @@ class FloatTools {
 	/**
 		Compute the unit-in-the-last-place (ULP) of a Float
 
-		FIXME defintion doesn't match implementation
+		If the finite FP number X = d[0].d[1]d[2]...d[p−1]×r^e is used to represent an
+		infinitely precise x, it is in error by |d[0].d[1]d[2]...d[p−1] - (x/r^e)| units in
+		the last place.  Thus, for finite X,
 
-		Definition: if x is a real number that lies between two finite consecutive FP
-		numbers a and b, without being equal to one of them, then ulp (x) = |b−a|,
-		otherwise ulp (x) is the distance between the two finite FP numbers nearest x.
-		Moreover, ulp (NaN) is NaN.
+				      ulp(X) = r^(e - p + 1).
 
-		Muller, Jean-Michel. (2005). On the definition of ulp(x).
+		However, if X is ±∞, x cannot be represented by a finite FP number and ulp(X) is
+		the distance between the largest finite number and its predecessor.  Moreover,
+		ulp(NaN) is NaN.
+
+		This particular definition of ULP combines the cheap implementation for finite X
+		from Goldberg (1991) with the well defined behavior around ±∞ and NaN from Muller
+		(2005).
+
+		Additionally, from this definition and for finite X (Muller, 2005):
+
+				 X = RN(x) ⇒ |X − x| ≤ 1/2×ulp(X)
+			   |X - x| < 1/2×ulp(X) does not imply X = RN(x)
+			       X ∈ {RD(x), RU(x)} ⇒ |X − x| ≤ ulp(X)
+			|X − x| < ulp(X) does not imply X ∈ {RD(x), RU(x)}
+
+		Goldberg (1991).  What every computer scientist should know about floating-point
+		arithmetic.
+
+		Knuth (1997).  The art of computer programming, 3rd edition (section 4.2.2).
+
+		Muller, Jean-Michel (2005).  On the definition of ulp(x).
 		http://ljk.imag.fr/membres/Carine.Lucas/TPScilab/JMMuller/ulp-toms.pdf
 
-		Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for Computer Aided
-		Design and Manufacturing (Section 4.8.2, algorithm 4.2).
+		Patrikalakis, N.; Maekawa, T.; Cho, W (2009).  Shape interrogation for computer
+		aided design and manufacturing (section 4.8.2, algorithm 4.2).
 		http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 	**/
 	public static function ulp(x:Float):Float

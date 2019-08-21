@@ -9,8 +9,8 @@ import precise.FloatTools.ulp;
 	TODO trig
 	TODO round
 
-	Patrikalakis, N.; Maekawa, T.; Cho, W.  Shape Interrogation for Computer Aided Design and
-	Manufacturing (Section 4.8).
+	Patrikalakis, N.; Maekawa, T.; Cho, W (2009).  Shape Interrogation for Computer Aided
+	Design and Manufacturing (Section 4.8).
 	http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 **/
 abstract FloatInterval(FloatIntervalImpl) {
