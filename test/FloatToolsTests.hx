@@ -63,6 +63,6 @@ class FloatToolsTests extends utest.Test {
 	{
 		Math.POSITIVE_INFINITY.ulp() == Math.pow(2, 1023 - 52);
 		Math.NEGATIVE_INFINITY.ulp() == Math.pow(2, 1023 - 52);
-		Math.isNaN(Math.NaN.ulp());
+		Math.isNaN(Math.NaN.ulp()) == true;
 	}
 }

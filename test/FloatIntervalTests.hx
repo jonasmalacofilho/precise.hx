@@ -28,20 +28,17 @@ class FloatIntervalTests extends utest.Test {
 		var c = FloatInterval.make(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
 		c.lower == Math.NEGATIVE_INFINITY;
 		c.upper == Math.POSITIVE_INFINITY;
-		Math.isNaN(c.mean);
-		Math.isNaN(c.error);
-		Math.isNaN(c.relerror);
+		Math.isNaN(c.mean) == true;
+		c.error == Math.POSITIVE_INFINITY;
+		Math.isNaN(c.relerror) == true;
 
 		var d = FloatInterval.fromFloat(Math.NaN);
-		Math.isNaN(c.lower);
-		Math.isNaN(c.upper);
+		Math.isNaN(d.lower) == true;
+		Math.isNaN(d.upper) == true;
 
 		var e = FloatInterval.make(8, 2);
-		a.lower == 2;
-		a.upper == 8;
-		a.mean == 5;
-		a.error == 3;
-		a.relerror == 3/5;
+		e.lower == 2;
+		e.upper == 8;
 	}
 
 	function test_add()
