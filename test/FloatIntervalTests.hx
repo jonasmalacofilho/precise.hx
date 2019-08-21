@@ -41,7 +41,7 @@ class FloatIntervalTests extends utest.Test {
 		e.upper == 8;
 	}
 
-	function test_add()
+	function spec_add()
 	{
 		var a = FloatInterval.fromFloat(1);
 		var b = FloatInterval.fromFloat(1e-32);
@@ -49,33 +49,33 @@ class FloatIntervalTests extends utest.Test {
 		var d = b + a;
 		var e = a + 1e-32;
 		var f = 1 + b;
-		equals(1 + 1e-32 - ulp(1 + 1e-32), c.lower);
-		equals(1 + 1e-32 + ulp(1 + 1e-32), c.upper);
-		equals(c.lower, d.lower);
-		equals(c.upper, d.upper);
-		equals(c.lower, e.lower);
-		equals(c.upper, e.upper);
-		equals(c.lower, f.lower);
-		equals(c.upper, f.upper);
+		c.lower == 1 + 1e-32 - ulp(1 + 1e-32);
+		c.upper == 1 + 1e-32 + ulp(1 + 1e-32);
+		d.lower == c.lower;
+		d.upper == c.upper;
+		e.lower == c.lower;
+		e.upper == c.upper;
+		f.lower == c.lower;
+		f.upper == c.upper;
 
 		var g = a + Math.POSITIVE_INFINITY;
-		equals(Math.POSITIVE_INFINITY, g.lower);
-		equals(Math.POSITIVE_INFINITY, g.upper);
+		g.lower == Math.POSITIVE_INFINITY;
+		g.upper == Math.POSITIVE_INFINITY;
 
 		var h = a + Math.NEGATIVE_INFINITY;
-		equals(Math.NEGATIVE_INFINITY, h.lower);
-		equals(Math.NEGATIVE_INFINITY, h.upper);
+		h.lower == Math.NEGATIVE_INFINITY;
+		h.upper == Math.NEGATIVE_INFINITY;
 
 		var i = a + Math.NaN;
-		isTrue(Math.isNaN(i.lower));
-		isTrue(Math.isNaN(i.upper));
+		Math.isNaN(i.lower) == true;
+		Math.isNaN(i.upper) == true;
 
 		var j = FloatInterval.fromFloat(Math.POSITIVE_INFINITY) + Math.NEGATIVE_INFINITY;
-		isTrue(Math.isNaN(j.lower));
-		isTrue(Math.isNaN(j.upper));
+		Math.isNaN(j.lower) == true;
+		Math.isNaN(j.upper) == true;
 	}
 
-	function test_sub()
+	function spec_sub()
 	{
 		var a = FloatInterval.fromFloat(1);
 		var b = FloatInterval.fromFloat(1e-32);
@@ -83,33 +83,33 @@ class FloatIntervalTests extends utest.Test {
 		var d = b - a;
 		var e = a - 1e-32;
 		var f = 1 - b;
-		equals(1 - 1e-32 - ulp(1 - 1e-32), c.lower);
-		equals(1 - 1e-32 + ulp(1 - 1e-32), c.upper);
-		equals(1e-32 - 1 - ulp(1e-32 - 1), d.lower);
-		equals(1e-32 - 1 + ulp(1e-32 - 1), d.upper);
-		equals(c.lower, e.lower);
-		equals(c.upper, e.upper);
-		equals(c.lower, f.lower);
-		equals(c.upper, f.upper);
+		c.lower == 1 - 1e-32 - ulp(1 - 1e-32);
+		c.upper == 1 - 1e-32 + ulp(1 - 1e-32);
+		d.lower == 1e-32 - 1 - ulp(1e-32 - 1);
+		d.upper == 1e-32 - 1 + ulp(1e-32 - 1);
+		e.lower == c.lower;
+		e.upper == c.upper;
+		f.lower == c.lower;
+		f.upper == c.upper;
 
 		var g = a - Math.POSITIVE_INFINITY;
-		equals(Math.NEGATIVE_INFINITY, g.lower);
-		equals(Math.NEGATIVE_INFINITY, g.upper);
+		g.lower == Math.NEGATIVE_INFINITY;
+		g.upper == Math.NEGATIVE_INFINITY;
 
 		var h = a - Math.NEGATIVE_INFINITY;
-		equals(Math.POSITIVE_INFINITY, h.lower);
-		equals(Math.POSITIVE_INFINITY, h.upper);
+		h.lower == Math.POSITIVE_INFINITY;
+		h.upper == Math.POSITIVE_INFINITY;
 
 		var i = a - Math.NaN;
-		isTrue(Math.isNaN(i.lower));
-		isTrue(Math.isNaN(i.upper));
+		Math.isNaN(i.lower) == true;
+		Math.isNaN(i.upper) == true;
 
 		var j = FloatInterval.fromFloat(Math.POSITIVE_INFINITY) - Math.POSITIVE_INFINITY;
-		isTrue(Math.isNaN(j.lower));
-		isTrue(Math.isNaN(j.upper));
+		Math.isNaN(j.lower) == true;
+		Math.isNaN(j.upper) == true;
 	}
 
-	function test_mult()
+	function spec_mult()
 	{
 		var a = FloatInterval.fromFloat(1);
 		var b = FloatInterval.fromFloat(1e-32);
@@ -117,33 +117,33 @@ class FloatIntervalTests extends utest.Test {
 		var d = b*a;
 		var e = a*1e-32;
 		var f = 1*b;
-		equals(1e-32 - ulp(1e-32), c.lower);
-		equals(1e-32 + ulp(1e-32), c.upper);
-		equals(c.lower, d.lower);
-		equals(c.upper, d.upper);
-		equals(c.lower, e.lower);
-		equals(c.upper, e.upper);
-		equals(c.lower, f.lower);
-		equals(c.upper, f.upper);
+		c.lower == 1e-32 - ulp(1e-32);
+		c.upper == 1e-32 + ulp(1e-32);
+		d.lower == c.lower;
+		d.upper == c.upper;
+		e.lower == c.lower;
+		e.upper == c.upper;
+		f.lower == c.lower;
+		f.upper == c.upper;
 
 		var g = a*Math.POSITIVE_INFINITY;
-		equals(Math.POSITIVE_INFINITY, g.lower);
-		equals(Math.POSITIVE_INFINITY, g.upper);
+		g.lower == Math.POSITIVE_INFINITY;
+		g.upper == Math.POSITIVE_INFINITY;
 
 		var h = a*Math.NEGATIVE_INFINITY;
-		equals(Math.NEGATIVE_INFINITY, h.lower);
-		equals(Math.NEGATIVE_INFINITY, h.upper);
+		h.lower == Math.NEGATIVE_INFINITY;
+		h.upper == Math.NEGATIVE_INFINITY;
 
 		var i = a*Math.NaN;
-		isTrue(Math.isNaN(i.lower));
-		isTrue(Math.isNaN(i.upper));
+		Math.isNaN(i.lower) == true;
+		Math.isNaN(i.upper) == true;
 
 		var j = FloatInterval.fromFloat(0)*Math.POSITIVE_INFINITY;
-		isTrue(Math.isNaN(j.lower));
-		isTrue(Math.isNaN(j.upper));
+		Math.isNaN(j.lower) == true;
+		Math.isNaN(j.upper) == true;
 	}
 
-	function test_div()
+	function spec_div()
 	{
 		var a = FloatInterval.fromFloat(1);
 		var b = FloatInterval.fromFloat(1e-32);
@@ -151,57 +151,57 @@ class FloatIntervalTests extends utest.Test {
 		var d = b/a;
 		var e = a/1e-32;
 		var f = 1/b;
-		equals(1/1e-32 - ulp(1/1e-32), c.lower);
-		equals(1/1e-32 + ulp(1/1e-32), c.upper);
-		equals(1e-32 - ulp(1e-32), d.lower);
-		equals(1e-32 + ulp(1e-32), d.upper);
-		equals(c.lower, e.lower);
-		equals(c.upper, e.upper);
-		equals(c.lower, f.lower);
-		equals(c.upper, f.upper);
+		c.lower == 1/1e-32 - ulp(1/1e-32);
+		c.upper == 1/1e-32 + ulp(1/1e-32);
+		d.lower == 1e-32 - ulp(1e-32);
+		d.upper == 1e-32 + ulp(1e-32);
+		e.lower == c.lower;
+		e.upper == c.upper;
+		f.lower == c.lower;
+		f.upper == c.upper;
 
 		var g = a/Math.POSITIVE_INFINITY;
-		equals(-ulp(0), g.lower);
-		equals(ulp(0), g.upper);
+		g.lower == -ulp(0);
+		g.upper == ulp(0);
 
 		var h = a/Math.NEGATIVE_INFINITY;
-		equals(-ulp(0), g.lower);
-		equals(ulp(0), g.upper);
+		g.lower == -ulp(0);
+		g.upper == ulp(0);
 
 		var i = Math.POSITIVE_INFINITY/a;
-		equals(Math.POSITIVE_INFINITY, i.lower);
-		equals(Math.POSITIVE_INFINITY, i.upper);
+		i.lower == Math.POSITIVE_INFINITY;
+		i.upper == Math.POSITIVE_INFINITY;
 
 		var j = Math.NEGATIVE_INFINITY/a;
-		equals(Math.NEGATIVE_INFINITY, j.lower);
-		equals(Math.NEGATIVE_INFINITY, j.upper);
+		j.lower == Math.NEGATIVE_INFINITY;
+		j.upper == Math.NEGATIVE_INFINITY;
 
 		var k = a/Math.NaN;
-		isTrue(Math.isNaN(k.lower));
-		isTrue(Math.isNaN(k.upper));
+		Math.isNaN(k.lower) == true;
+		Math.isNaN(k.upper) == true;
 
 		var m = FloatInterval.fromFloat(0)/0;
-		isTrue(Math.isNaN(m.lower));
-		isTrue(Math.isNaN(m.upper));
+		Math.isNaN(m.lower) == true;
+		Math.isNaN(m.upper) == true;
 	}
 
-	function test_neg()
+	function spec_neg()
 	{
 		var a = FloatInterval.make(2, 8);
 		var b = -a;
-		equals(-8, b.lower);
-		equals(-2, b.upper);
+		b.lower == -8;
+		b.upper == -2;
 
 		var c = -FloatInterval.fromFloat(Math.POSITIVE_INFINITY);
-		equals(Math.NEGATIVE_INFINITY, c.lower);
-		equals(Math.NEGATIVE_INFINITY, c.upper);
+		c.lower == Math.NEGATIVE_INFINITY;
+		c.upper == Math.NEGATIVE_INFINITY;
 
 		var d = -FloatInterval.fromFloat(Math.NEGATIVE_INFINITY);
-		equals(Math.POSITIVE_INFINITY, d.lower);
-		equals(Math.POSITIVE_INFINITY, d.upper);
+		d.lower == Math.POSITIVE_INFINITY;
+		d.upper == Math.POSITIVE_INFINITY;
 
 		var e = -FloatInterval.fromFloat(Math.NaN);
-		isTrue(Math.isNaN(e.lower));
-		isTrue(Math.isNaN(e.upper));
+		Math.isNaN(e.lower) == true;
+		Math.isNaN(e.upper) == true;
 	}
 }
