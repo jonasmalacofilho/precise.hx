@@ -1,5 +1,10 @@
 package precise;
 
+/**
+	Tools for using Floats in precise computations
+
+	TODO null safety
+**/
 class FloatTools {
 	/**
 		Return the binary encoding of a Float in a Bytes object

@@ -3,10 +3,6 @@ import precise.FloatTools.ulp;
 import utest.Assert.*;
 using precise.FloatTools;
 
-/**
-	TODO make(upper, lower)
-	TODO add|sub|mult|div|neg(null)
-**/
 class FloatIntervalTests extends utest.Test {
 	function test_api()
 	{
@@ -39,6 +35,13 @@ class FloatIntervalTests extends utest.Test {
 		var d = FloatInterval.fromFloat(Math.NaN);
 		Math.isNaN(c.lower);
 		Math.isNaN(c.upper);
+
+		var e = FloatInterval.make(8, 2);
+		a.lower == 2;
+		a.upper == 8;
+		a.mean == 5;
+		a.error == 3;
+		a.relerror == 3/5;
 	}
 
 	function test_add()

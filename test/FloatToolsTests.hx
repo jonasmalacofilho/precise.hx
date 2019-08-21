@@ -1,9 +1,6 @@
 import utest.Assert.*;
 using precise.FloatTools;
 
-/**
-	TODO ulp(null)
-**/
 class FloatToolsTests extends utest.Test {
 	static inline var MIN_POSITIVE_SUBNORMAL = 4.9406564584124654e-324;  // 2^-1022 × 2^-52
 
