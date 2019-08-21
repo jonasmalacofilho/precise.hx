@@ -4,9 +4,31 @@ import utest.Assert.*;
 using precise.FloatTools;
 
 class FloatIntervalTests extends utest.Test {
-	function test_api()
+	function test_give_an_example()
 	{
-		pass();
+		/**
+			Conversion to radix 2 of Knuth's example of a expectacular failure of the
+			distributive law between ⊗ and ⊕
+		**/
+		var u = 3*Math.pow(2, 44);
+		var v = -7;
+		var w = -v + Math.pow(2, -49);
+		trace('[example] take u = $u, v = $v, w = $w');
+
+		var fp1 = u*v + u*w;
+		var fp2 = u*(v + w);
+		trace('[example] FP results: u*v + u*w = $fp1 while u*(v + w) = $fp2');
+
+		var ria1 = (u:FloatInterval)*v + u*w;
+		var ria2 = (u:FloatInterval)*(v + w);
+		trace('[example] but with RIA: u*v + u*w = ${ria1.mean} ± ${ria1.error}');
+		trace('[example] (cont.) while u*(v + w) = ${ria2.mean} ± ${ria2.error}');
+
+		// make sure the example is working as intended
+		var expected = fp2;
+		notEquals(expected, fp1);
+		isTrue(ria1.lower <= expected && expected <= ria1.upper);
+		isTrue(ria2.lower <= expected && expected <= ria2.upper);
 	}
 
 	function spec_properties()
