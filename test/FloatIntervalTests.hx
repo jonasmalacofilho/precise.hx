@@ -221,13 +221,13 @@ class FloatIntervalTests extends utest.Test {
 		b.lower == Math.NEGATIVE_INFINITY;
 		b.upper == Math.POSITIVE_INFINITY;  // because of -1/0-
 
-		var c = FloatInterval.make(-1, 1)/FloatInterval.make(-1, 1);
-		Math.isNaN(c.lower) == true;  // must consider 0/0
-		Math.isNaN(c.upper) == true;  // must consider 0/0
+		var c = 1/FloatInterval.make(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
+		c.lower == Math.NEGATIVE_INFINITY;
+		c.upper == Math.POSITIVE_INFINITY;
 
-		var d = 1/FloatInterval.make(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
-		d.lower == Math.NEGATIVE_INFINITY;  // same as with finite divisor
-		d.upper == Math.POSITIVE_INFINITY;  // same as with finite divisor
+		var d = FloatInterval.make(-1, 1)/FloatInterval.make(-1, 1);
+		Math.isNaN(d.lower) == true;  // must consider 0/0
+		Math.isNaN(d.upper) == true;  // must consider 0/0
 
 		var e = Math.POSITIVE_INFINITY/FloatInterval.make(Math.NEGATIVE_INFINITY,
 				Math.POSITIVE_INFINITY);
