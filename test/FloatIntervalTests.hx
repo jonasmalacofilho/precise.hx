@@ -156,7 +156,7 @@ class FloatIntervalTests extends utest.Test {
 		h.lower == Math.NEGATIVE_INFINITY;
 		h.upper == Math.NEGATIVE_INFINITY;
 
-		var i = a*Math.NaN;
+		var i = a*FloatInterval.make(Math.NaN, 1);
 		Math.isNaN(i.lower) == true;
 		Math.isNaN(i.upper) == true;
 
@@ -198,13 +198,45 @@ class FloatIntervalTests extends utest.Test {
 		j.lower == Math.NEGATIVE_INFINITY;
 		j.upper == Math.NEGATIVE_INFINITY;
 
-		var k = a/Math.NaN;
+		var k = a/FloatInterval.make(Math.NaN, 1);
 		Math.isNaN(k.lower) == true;
 		Math.isNaN(k.upper) == true;
+
+		var l = FloatInterval.fromFloat(Math.NEGATIVE_INFINITY)/Math.POSITIVE_INFINITY;
+		Math.isNaN(l.lower) == true;
+		Math.isNaN(l.upper) == true;
 
 		var m = FloatInterval.fromFloat(0)/0;
 		Math.isNaN(m.lower) == true;
 		Math.isNaN(m.upper) == true;
+	}
+
+	function spec_div_by_possible_zero()
+	{
+		var a = 1/FloatInterval.make(-1, 1);
+		a.lower == Math.NEGATIVE_INFINITY;  // because of 1/0-
+		a.upper == Math.POSITIVE_INFINITY;
+
+		var b = (-1)/FloatInterval.make(-1, 1);
+		b.lower == Math.NEGATIVE_INFINITY;
+		b.upper == Math.POSITIVE_INFINITY;  // because of -1/0-
+
+		var c = FloatInterval.make(-1, 1)/FloatInterval.make(-1, 1);
+		Math.isNaN(c.lower) == true;  // must consider 0/0
+		Math.isNaN(c.upper) == true;  // must consider 0/0
+
+		var d = 1/FloatInterval.make(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
+		d.lower == Math.NEGATIVE_INFINITY;  // same as with finite divisor
+		d.upper == Math.POSITIVE_INFINITY;  // same as with finite divisor
+
+		var e = Math.POSITIVE_INFINITY/FloatInterval.make(Math.NEGATIVE_INFINITY,
+				Math.POSITIVE_INFINITY);
+		Math.isNaN(e.lower) == true;  // must consider ∞/±∞
+		Math.isNaN(e.upper) == true;  // must consider ∞/±∞
+
+		var f = FloatInterval.make(Math.NaN, 1)/FloatInterval.make(-1, 1);
+		Math.isNaN(f.lower) == true;  // NaN divident taints everything
+		Math.isNaN(f.upper) == true;  // NaN divident taints everything
 	}
 
 	function spec_neg()

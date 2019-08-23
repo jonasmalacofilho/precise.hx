@@ -9,7 +9,7 @@ import precise.FloatTools.ulp;
 	TODO trig functions
 	TODO round methods
 	TODO null safety
-	TODO consider Knuth's observations
+	TODO consider Knuth's observations on not faulting on over/underflows
 
 	Knuth (1997).  The art of computer programming, 3rd edition (section 4.2.2.C).
 
@@ -91,6 +91,12 @@ abstract FloatInterval(FloatIntervalImpl) {
 
 	@:op(a/b) public static function div(lhs:FloatInterval, rhs:FloatInterval)
 	{
+		if (rhs.lower < 0 && rhs.upper > 0) {
+			if ((lhs.lower <= 0 && lhs.upper >= 0) || !Math.isFinite(lhs.lower) ||
+					!Math.isFinite(lhs.upper))
+				return fromFloat(Math.NaN);
+			return make(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
+		}
 		var lo = min(lhs.lower/rhs.lower, lhs.lower/rhs.upper,
 				lhs.upper/rhs.lower, lhs.upper/rhs.upper);
 		var up = max(lhs.lower/rhs.lower, lhs.lower/rhs.upper,
