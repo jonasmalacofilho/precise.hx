@@ -1,0 +1,3 @@
+utest_setup.hxml
+--hl out/main.hl
+--cmd hl out/main.hl

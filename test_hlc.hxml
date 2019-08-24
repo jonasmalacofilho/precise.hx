@@ -1,0 +1,4 @@
+utest_setup.hxml
+--hl out/hlc/main.c
+--cmd gcc -O3 -o out/hlc/main -Iout/hlc -std=c11 out/hlc/main.c -lhl
+--cmd out/hlc/main

@@ -27,6 +27,7 @@ class CurrencyTests extends utest.Test {
 			}
 		} catch (err:Dynamic) {
 			trace('[info] survived $i iterations; last sum = ${sum.mean} ± ${sum.error}');
+			trace('[info] error was: $err');
 		}
 		isTrue(i > 1e3);
 		isTrue(sum.mean > 1e6);
