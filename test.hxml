@@ -1,15 +1,2 @@
-# emulate -lib precise
--cp lib
--D precise
-
-# set up tests
--cp test
--lib utest
--main Main
---each
-
---neko main.n
---cmd neko main.n
---next
-
+utest_setup.hxml
 --interp

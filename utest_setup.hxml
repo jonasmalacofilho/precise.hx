@@ -1,0 +1,8 @@
+# emulate -lib precise
+--class-path lib
+-D precise
+
+# set up tests
+--class-path test
+--library utest
+--main Main

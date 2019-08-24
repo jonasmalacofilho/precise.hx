@@ -1,0 +1,3 @@
+utest_setup.hxml
+--neko out/main.n
+--cmd neko out/main.n
