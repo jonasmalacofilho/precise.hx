@@ -13,7 +13,6 @@ Floating point interval (FPI) arithmetic with double precision.
 var u = 3 * Math.pow(2, 44);
 var v = -7;
 var w = -v + Math.pow(2, -49);
-trace('[example] take u = $u, v = $v, w = $w');
 
 // FP results (with double precision):
 trace(u * (v + w));                     // 0.09375
