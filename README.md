@@ -16,8 +16,9 @@ var w = -v + Math.pow(2, -49);
 trace('[example] take u = $u, v = $v, w = $w');
 
 // FP results (with double precision):
-trace(u * (v + w));                     // 0.09375 (expected value)
-trace(u * v + u * w);                   // 0.125 <-- NOO!!!
+trace(u * (v + w));                     // 0.09375
+trace(u * v + u * w);                   // 0.125
+// big difference there, and no idea which one (if any) to pick
 
 // but with FPI arithmetic:
 trace((u : FloatInterval) * (v + w));   // 0.09375 ± 1.38777878078145e-17

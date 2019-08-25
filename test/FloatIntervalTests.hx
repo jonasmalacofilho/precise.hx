@@ -11,7 +11,6 @@ class FloatIntervalTests extends utest.Test {
 			distributive law between ⊗ and ⊕
 		**/
 		var u = 3 * Math.pow(2, 44);
-
 		var v = -7;
 		var w = -v + Math.pow(2, -49);
 		trace('[example] take u = $u, v = $v, w = $w');
