@@ -1,10 +1,11 @@
 import precise.FloatInterval;
 import precise.FloatTools.ulp;
 import utest.Assert.*;
-
 using precise.FloatTools;
 
 class FloatIntervalTests extends utest.Test {
+	static inline var MAX_FINITE = 1.7976931348623157e308; // 2^1023 × (1 + (1 - 2^-52))
+
 	function test_give_an_example() {
 		/**
 			Conversion to radix 2 of Knuth's example of a expectacular failure of the
@@ -61,7 +62,15 @@ class FloatIntervalTests extends utest.Test {
 		e.lower == 2;
 		e.upper == 8;
 
-		// TODO test rounding of .mean
+		FloatInterval.make(1, 1 + 1 * ulp(1)).mean == 1 + 0 * ulp(1);
+		FloatInterval.make(1, 1 + 3 * ulp(1)).mean == 1 + 2 * ulp(1);
+		FloatInterval.make(1, 1 + 5 * ulp(1)).mean == 1 + 2 * ulp(1);
+		FloatInterval.make(1, 1 + 7 * ulp(1)).mean == 1 + 4 * ulp(1);
+		FloatInterval.make(1, 1 + 9 * ulp(1)).mean == 1 + 4 * ulp(1);
+
+		var m = MAX_FINITE;
+		FloatInterval.make(m - 5 * ulp(m), m).mean == m - 3 * ulp(m);  // pot. overflow
+		FloatInterval.make(-ulp(0), ulp(0)).mean == 0;  // pot. underflow
 	}
 
 	function spec_add() {
