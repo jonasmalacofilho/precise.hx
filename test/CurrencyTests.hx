@@ -2,18 +2,16 @@ import precise.Currency;
 import utest.Assert.*;
 
 class CurrencyTests extends utest.Test {
-	function test_give_an_example()
-	{
+	function test_give_an_example() {
 		var min = Currency.parse("998.00");
 		trace('[example] add: ${(min + 18).mean} ± ${(min + 18).error}');
 		trace('[example] sub: ${(min - 18).mean} ± ${(min - 18).error}');
-		trace('[example] mul: ${(min*18).mean} ± ${(min*18).error}');
-		trace('[example] div: ${(min/18).mean} ± ${(min/18).error}');
+		trace('[example] mul: ${(min * 18).mean} ± ${(min * 18).error}');
+		trace('[example] div: ${(min / 18).mean} ± ${(min / 18).error}');
 		pass();
 	}
 
-	function test_default_max_error()
-	{
+	function test_default_max_error() {
 		// TODO save previous CurrencyFlags
 		// TODO restore default CurrencyFlags
 		var min = Currency.parse("998.00");
@@ -22,7 +20,7 @@ class CurrencyTests extends utest.Test {
 		var i = 0;
 		try {
 			while (true) {
-				sum = sum*interest + min;
+				sum = sum * interest + min;
 				i++;
 			}
 		} catch (err:Dynamic) {

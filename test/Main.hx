@@ -1,6 +1,5 @@
 class Main {
-	static function main()
-	{
+	static function main() {
 		var runner = new utest.Runner();
 
 		runner.addCase(new FloatToolsTests());

@@ -1,11 +1,11 @@
 import utest.Assert.*;
+
 using precise.FloatTools;
 
 class FloatToolsTests extends utest.Test {
-	static inline var MIN_POSITIVE_SUBNORMAL = 4.9406564584124654e-324;  // 2^-1022 × 2^-52
+	static inline var MIN_POSITIVE_SUBNORMAL = 4.9406564584124654e-324; // 2^-1022 × 2^-52
 
-	function spec_binary_repr()
-	{
+	function spec_binary_repr() {
 		1.toBinaryRepr() ==
 			"0 01111111111 0000000000000000000000000000000000000000000000000000";
 		Math.PI.toBinaryRepr() ==
@@ -14,8 +14,7 @@ class FloatToolsTests extends utest.Test {
 			"1 11111111111 0000000000000000000000000000000000000000000000000000";
 	}
 
-	function spec_normal_ulp()
-	{
+	function spec_normal_ulp() {
 		var x = 1.;
 		var ulp = x.ulp();
 		x.toBinaryRepr() ==
@@ -27,8 +26,7 @@ class FloatToolsTests extends utest.Test {
 		Math.pow(2, -52) == ulp;
 	}
 
-	function spec_subnormal_ulp()
-	{
+	function spec_subnormal_ulp() {
 		var x = 2.2250738585072014e-307;
 		var ulp = x.ulp();
 		x.toBinaryRepr() ==
@@ -40,13 +38,11 @@ class FloatToolsTests extends utest.Test {
 		Math.pow(2, 4 - 1023 - 52) == ulp;
 	}
 
-	function spec_ulp_of_subnormal()
-	{
+	function spec_ulp_of_subnormal() {
 		spec_ulp_of_zero();
 	}
 
-	function spec_ulp_of_zero()
-	{
+	function spec_ulp_of_zero() {
 		var x = 0;
 		var ulp = x.ulp();
 		x.toBinaryRepr() ==
@@ -59,8 +55,7 @@ class FloatToolsTests extends utest.Test {
 		MIN_POSITIVE_SUBNORMAL == ulp;
 	}
 
-	function spec_ulp_of_non_finite()
-	{
+	function spec_ulp_of_non_finite() {
 		Math.POSITIVE_INFINITY.ulp() == Math.pow(2, 1023 - 52);
 		Math.NEGATIVE_INFINITY.ulp() == Math.pow(2, 1023 - 52);
 		Math.isNaN(Math.NaN.ulp()) == true;

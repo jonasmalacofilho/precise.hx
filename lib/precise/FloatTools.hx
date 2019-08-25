@@ -13,8 +13,7 @@ class FloatTools {
 		Regardless, compatibility with other targets is garanteed (as long as the std calls
 		behave as documented).
 	**/
-	public static function toBytes(x:Float, bigEndian=false):haxe.io.Bytes
-	{
+	public static function toBytes(x:Float, bigEndian = false):haxe.io.Bytes {
 		/**
 			On Neko (!neko_v21):
 
@@ -52,9 +51,9 @@ class FloatTools {
 
 				      ulp(X) = r^(e - p + 1).
 
-		However, if X is ±∞, x cannot be represented by a finite FP number and ulp(X) is
-		the distance between the largest finite number and its predecessor.  Moreover,
-		ulp(NaN) is NaN.
+		However, if X is ±∞, x cannot be represented by a finite FP number and ulp(X) is the
+		distance between the largest finite number and its predecessor.  Moreover, ulp(NaN)
+		is NaN.
 
 		This particular definition of ULP combines the cheap implementation for finite X
 		from Goldberg (1991) with the well defined behavior around ±∞ and NaN from Muller
@@ -79,8 +78,7 @@ class FloatTools {
 		aided design and manufacturing (section 4.8.2, algorithm 4.2).
 		http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 	**/
-	public static function ulp(x:Float):Float
-	{
+	public static function ulp(x:Float):Float {
 		/**
 			Use a Bytes object to manipulate the Float in binary; note that
 			Bytes.getDouble assumes little endianess.
@@ -90,6 +88,7 @@ class FloatTools {
 			| SEEEEEEE| EEEEFFFF| FFFFFFFF| ... | FFFFFFFF| FFFFFFFF|
 			| byte[7] | byte[6] | byte[5] | ... | byte[1] | byte[0] |
 		**/
+
 		var bytes = toBytes(x, false);
 
 		// isolate the biased exponent, but keep it left (up) shifted by 4 bits
@@ -97,17 +96,17 @@ class FloatTools {
 
 		// ulp = 2^(E)*2^(-52) and 52 << 4 = 0x0340
 		bytes.fill(0, 8, 0);
-		if (exp == 0x7ff0) {  // ulp of non finite x
+		if (exp == 0x7ff0) { // ulp of non finite x
 			// inefficient, but focuses code and performance on the more common paths
 			return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
-		} else if (exp > 0x0340) {  // normal ulp
+		} else if (exp > 0x0340) { // normal ulp
 			bytes.setUInt16(6, exp - 0x0340);
-		} else if (exp > 0) {  // subnormal ulp, but normal x
+		} else if (exp > 0) { // subnormal ulp, but normal x
 			var e1 = (exp >> 4) - 1;
 			var pos = e1 >> 3;
 			var bit = e1 % 8;
 			bytes.set(pos, 1 << bit);
-		} else {   // subnormal x
+		} else { // subnormal x
 			bytes.set(0, 1);
 		}
 		return bytes.getDouble(0);
@@ -119,8 +118,7 @@ class FloatTools {
 		The return value always represents the binary encoding of the Float in big endian
 		order.
 	**/
-	public static function toBinaryRepr(x:Float):String
-	{
+	public static function toBinaryRepr(x:Float):String {
 		var bytes = toBytes(x, true);
 		var buf = new StringBuf();
 		for (byte in 0...8) {
