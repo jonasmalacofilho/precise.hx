@@ -1,24 +1,18 @@
 # precise.hx
 
-_Tools for precise arithmetic_
+_Floating point arithmetic with reliable error bounds_
 
 
 ## `FloatTools`
 
-Assorted tools for `Float`.
-
-### `.ulp`
-
-### `.toBytes`
-
-### `.toBinaryRepr`
+Assorted tools for `Float`, including `.ulp()` and `.repr()`.
 
 
 ## `FloatInterval`
 
-Rounded interval arithmetic (RIA) for `Float`.
+Floating point interval (FPI) arithmetic with double precision.
 
 
 ## `Currency`
 
-Currency arithmetic using `FloatInterval` (RIA).
+Manipulation of currency amounts using FPI arithmetic.
