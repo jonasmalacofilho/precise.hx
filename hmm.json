@@ -1,9 +1,0 @@
-{
-  "dependencies": [
-    {
-      "name": "utest",
-      "type": "haxelib",
-      "version": null
-    }
-  ]
-}
