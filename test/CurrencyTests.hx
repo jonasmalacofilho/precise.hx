@@ -4,10 +4,10 @@ import utest.Assert.*;
 class CurrencyTests extends utest.Test {
 	function test_give_an_example() {
 		var min = Currency.parse("998.00");
-		trace('[example] add: ${(min + 18).mean} ± ${(min + 18).error}');
-		trace('[example] sub: ${(min - 18).mean} ± ${(min - 18).error}');
-		trace('[example] mul: ${(min * 18).mean} ± ${(min * 18).error}');
-		trace('[example] div: ${(min / 18).mean} ± ${(min / 18).error}');
+		trace('[example] add: ${min + 18}');
+		trace('[example] sub: ${min - 18}');
+		trace('[example] mul: ${min * 18}');
+		trace('[example] div: ${min / 18}');
 		pass();
 	}
 
@@ -24,11 +24,11 @@ class CurrencyTests extends utest.Test {
 				i++;
 			}
 		} catch (err:Dynamic) {
-			trace('[info] survived $i iterations; last sum = ${sum.mean} ± ${sum.error}');
+			trace('[info] survived $i iterations; last successful sum = $sum');
 			trace('[info] error was: $err');
 		}
 		isTrue(i > 1e3);
-		isTrue(sum.mean > 1e6);
+		isTrue(sum.mean > 1e9);
 		// TODO restore previous CurrencyFlags
 	}
 }

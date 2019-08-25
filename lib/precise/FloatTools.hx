@@ -118,7 +118,7 @@ class FloatTools {
 		The return value always represents the binary encoding of the Float in big endian
 		order.
 	**/
-	public static function toBinaryRepr(x:Float):String {
+	public static function repr(x:Float):String {
 		var bytes = toBytes(x, true);
 		var buf = new StringBuf();
 		for (byte in 0...8) {

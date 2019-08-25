@@ -18,12 +18,12 @@ class FloatIntervalTests extends utest.Test {
 
 		var fp1 = u * v + u * w;
 		var fp2 = u * (v + w);
-		trace('[example] FP results: u*v + u*w = $fp1 while u*(v + w) = $fp2');
+		trace('[example] FP results: u * v + u * w = $fp1 while u * (v + w) = $fp2');
 
 		var ria1 = (u : FloatInterval) * v + u * w;
 		var ria2 = (u : FloatInterval) * (v + w);
-		trace('[example] but with RIA: u*v + u*w = ${ria1.mean} ± ${ria1.error}');
-		trace('[example] (cont.) while u*(v + w) = ${ria2.mean} ± ${ria2.error}');
+		trace('[example] but with FPI: u * v + u * w = $ria1');
+		trace('[example] (cont.) while u * (v + w) = $ria2');
 
 		// make sure the example is working as intended
 		var expected = fp2;

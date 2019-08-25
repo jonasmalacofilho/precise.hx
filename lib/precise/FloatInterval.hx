@@ -3,7 +3,7 @@ package precise;
 import precise.FloatTools.ulp;
 
 /**
-	Rounded interval arithmetic (RIA) for double precision Float numbers
+	Floating point interval (FPI) arithmetic in double precision
 
 	TODO pow, sqrt, log
 	TODO trig functions
@@ -94,6 +94,17 @@ abstract FloatInterval(FloatIntervalImpl) {
 
 	@:op(-a) public function neg() {
 		return make(-this.up, -this.lo);
+	}
+
+	@:to public function toString() {
+		return '$mean ± $error';
+	}
+
+	/**
+		Return a human readable representation of the underlying interval
+	**/
+	public function repr() {
+		return lower == upper ? '{$lower}' : '($lower, $upper)';
 	}
 
 	static function min(x:Float, y:Float, w:Float, z:Float) {

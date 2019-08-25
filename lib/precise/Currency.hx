@@ -1,6 +1,6 @@
 package precise;
 
-@:forward(upper, lower, mean, error, relerror)
+@:forward(upper, lower, mean, error, relerror, repr)
 abstract Currency(FloatInterval) to FloatInterval {
 	inline function new(value) {
 		this = value;
@@ -45,13 +45,18 @@ abstract Currency(FloatInterval) to FloatInterval {
 			CurrentFlags.max_error_handler(res);
 		return res;
 	}
+
+	@:to public inline function toString() {
+		return Std.string(this.mean);  // FIXME round
+	}
 }
 
 class CurrentFlags {
 	public static var max_error:Null<Float> = 0.0005;
 	public static var max_error_handler = default_handler;
 
+	// TODO receive op and args
 	static function default_handler(value:Currency, ?pos:haxe.PosInfos) {
-		throw 'RIA Error too large: [${value.lower}, ${value.upper}]';
+		throw 'Error bound exceeds threadshold; FPI = ${value.repr()}';
 	}
 }
