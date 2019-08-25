@@ -254,8 +254,11 @@ class FloatIntervalTests extends utest.Test {
 		Math.isNaN(e.lower) == true;
 		Math.isNaN(e.upper) == true;
 
-		(-a + a).mean == 0; // FIXME
-		(a - a).mean == 0; // FIXME
+		var f = FloatInterval.make(8 - ulp(8), 8 + ulp(8));
+		(-f + f).mean == 0;
+		(-f + f).error == 2 * ulp(8) + ulp(2 * ulp(8));
+		(f - f).mean == (-f + f).mean;
+		(f - f).error == (-f + f).error;
 
 		// TODO test a/a and a/(-a)
 	}
