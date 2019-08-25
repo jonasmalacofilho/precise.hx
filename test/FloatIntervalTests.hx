@@ -61,6 +61,8 @@ class FloatIntervalTests extends utest.Test {
 		var e = FloatInterval.make(8, 2);
 		e.lower == 2;
 		e.upper == 8;
+
+		// TODO test rounding of .mean
 	}
 
 	function spec_add()
@@ -257,5 +259,27 @@ class FloatIntervalTests extends utest.Test {
 		var e = -FloatInterval.fromFloat(Math.NaN);
 		Math.isNaN(e.lower) == true;
 		Math.isNaN(e.upper) == true;
+
+		(-a + a).mean == 0;  // FIXME
+		(a - a).mean == 0;  // FIXME
+
+		// TODO test a/a and a/(-a)
+	}
+
+	function spec_ids()
+	{
+		var a = FloatInterval.make(2, 8);
+
+		(a + 0).lower == a.lower - ulp(a.lower);
+		(a + 0).upper == a.upper + ulp(a.upper);
+
+		(a - 0).lower == a.lower - ulp(a.lower);
+		(a - 0).upper == a.upper + ulp(a.upper);
+
+		(a*1).lower == a.lower - ulp(a.lower);
+		(a*1).upper == a.upper + ulp(a.upper);
+
+		(a/1).lower == a.lower - ulp(a.lower);
+		(a/1).upper == a.upper + ulp(a.upper);
 	}
 }
