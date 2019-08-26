@@ -267,8 +267,6 @@ class FloatIntervalTests extends utest.Test {
 		(-f + f).error == 2 * ulp(8) + ulp(2 * ulp(8));
 		(f - f).mean == (-f + f).mean;
 		(f - f).error == (-f + f).error;
-
-		// TODO test a/a and a/(-a)
 	}
 
 	function spec_ids() {

@@ -9,7 +9,6 @@ import precise.FloatTools.ulp;
 	TODO trig functions
 	TODO round methods
 	TODO null safety
-	TODO consider Knuth's observations on not faulting on over/underflows
 
 	Knuth (1997).  The art of computer programming, 3rd edition (section 4.2.2.C).
 
