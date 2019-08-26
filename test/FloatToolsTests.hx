@@ -5,7 +5,7 @@ using precise.FloatTools;
 class FloatToolsTests extends utest.Test {
 	static inline var MIN_POSITIVE_SUBNORMAL = 4.9406564584124654e-324; // 2^-1022 × 2^-52
 
-	function spec_binary_repr() {
+	function spec_repr() {
 		1.repr() ==
 			"0 01111111111 0000000000000000000000000000000000000000000000000000";
 		Math.PI.repr() ==
