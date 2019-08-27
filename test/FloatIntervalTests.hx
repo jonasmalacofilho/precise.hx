@@ -321,5 +321,26 @@ class FloatIntervalTests extends utest.Test {
 		!(FloatInterval.make(3, 4) >= FloatInterval.make(5, 6));
 		!(FloatInterval.make(3, 4) > FloatInterval.make(5, 6));
 		FloatInterval.make(3, 4) != FloatInterval.make(5, 6);
+
+		FloatInterval.fromFloat(3) > 2;
+		FloatInterval.fromFloat(3) >= 2;
+		!(FloatInterval.fromFloat(3) == 2);
+		!(FloatInterval.fromFloat(3) <= 2);
+		!(FloatInterval.fromFloat(3) < 2);
+		FloatInterval.fromFloat(3) != 2;
+
+		!(FloatInterval.fromFloat(3) < 3);
+		FloatInterval.fromFloat(3) >= 3;
+		FloatInterval.fromFloat(3) == 3;
+		FloatInterval.fromFloat(3) <= 3;
+		!(FloatInterval.fromFloat(3) > 3);
+		!(FloatInterval.fromFloat(3) != 3);
+
+		FloatInterval.fromFloat(3) < 4;
+		FloatInterval.fromFloat(3) <= 4;
+		!(FloatInterval.fromFloat(3) == 4);
+		!(FloatInterval.fromFloat(3) >= 4);
+		!(FloatInterval.fromFloat(3) > 4);
+		FloatInterval.fromFloat(3) != 4;
 	}
 }
