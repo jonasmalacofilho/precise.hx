@@ -284,4 +284,42 @@ class FloatIntervalTests extends utest.Test {
 		(a / 1).lower == a.lower - ulp(a.lower);
 		(a / 1).upper == a.upper + ulp(a.upper);
 	}
+
+	function spec_comparisons()
+	{
+		FloatInterval.make(3, 4) > FloatInterval.make(1, 2);
+		FloatInterval.make(3, 4) >= FloatInterval.make(1, 2);
+		!(FloatInterval.make(3, 4) == FloatInterval.make(1, 2));
+		!(FloatInterval.make(3, 4) <= FloatInterval.make(1, 2));
+		!(FloatInterval.make(3, 4) < FloatInterval.make(1, 2));
+		FloatInterval.make(3, 4) != FloatInterval.make(1, 2);
+
+		!(FloatInterval.make(3, 4) < FloatInterval.make(2, 3));
+		FloatInterval.make(3, 4) <= FloatInterval.make(2, 3);
+		FloatInterval.make(3, 4) == FloatInterval.make(2, 3);
+		FloatInterval.make(3, 4) >= FloatInterval.make(2, 3);
+		!(FloatInterval.make(3, 4) > FloatInterval.make(2, 3));
+		FloatInterval.make(3, 4) != FloatInterval.make(2, 3);
+
+		FloatInterval.make(3, 4) == FloatInterval.make(3, 4);
+		!(FloatInterval.make(3, 4) != FloatInterval.make(3, 4));
+		FloatInterval.make(3 + .1, 4 - .1) == FloatInterval.make(3, 4);
+		FloatInterval.make(3 + .1, 4 - .1) != FloatInterval.make(3, 4);
+		FloatInterval.make(3, 4) == FloatInterval.make(3 + .1, 4 - .1);
+		FloatInterval.make(3, 4) != FloatInterval.make(3 + .1, 4 - .1);
+
+		!(FloatInterval.make(3, 4) < FloatInterval.make(4, 5));
+		FloatInterval.make(3, 4) <= FloatInterval.make(4, 5);
+		FloatInterval.make(3, 4) == FloatInterval.make(4, 5);
+		FloatInterval.make(3, 4) >= FloatInterval.make(4, 5);
+		!(FloatInterval.make(3, 4) > FloatInterval.make(4, 5));
+		FloatInterval.make(3, 4) != FloatInterval.make(4, 5);
+
+		FloatInterval.make(3, 4) < FloatInterval.make(5, 6);
+		FloatInterval.make(3, 4) <= FloatInterval.make(5, 6);
+		!(FloatInterval.make(3, 4) == FloatInterval.make(5, 6));
+		!(FloatInterval.make(3, 4) >= FloatInterval.make(5, 6));
+		!(FloatInterval.make(3, 4) > FloatInterval.make(5, 6));
+		FloatInterval.make(3, 4) != FloatInterval.make(5, 6);
+	}
 }

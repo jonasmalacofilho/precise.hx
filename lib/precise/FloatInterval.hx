@@ -95,6 +95,31 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return make(-this.up, -this.lo);
 	}
 
+	@:op(a < b) public static function lt(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.upper < rhs.lower;
+	}
+
+	@:op(a <= b) public static function lte(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.lower <= rhs.upper;
+	}
+
+	@:op(a >= b) public static function gte(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.lower >= rhs.upper || lhs.upper >= rhs.lower;
+	}
+
+	@:op(a > b) public static function gt(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.lower > rhs.upper;
+	}
+
+	@:op(a == b) public static function eq(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.upper >= rhs.lower && lhs.lower <= rhs.upper;
+	}
+
+	@:op(a != b) public static function neq(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.lower < rhs.lower || lhs.upper > rhs.upper ||
+				rhs.lower < lhs.lower || rhs.upper > lhs.upper;
+	}
+
 	@:to public function toString() {
 		return '$mean ± $error';
 	}
