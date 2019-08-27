@@ -8,7 +8,7 @@ class FloatIntervalTests extends utest.Test {
 
 	function test_give_an_example() {
 		/**
-			Conversion to radix 2 of Knuth's example of a expectacular failure of the
+			Conversion to radix 2 of Knuth's example of a spectacular failure of the
 			distributive law between ⊗ and ⊕
 		**/
 		var u = 3 * Math.pow(2, 44);
@@ -240,8 +240,8 @@ class FloatIntervalTests extends utest.Test {
 		Math.isNaN(e.upper) == true; // must consider ∞/±∞
 
 		var f = FloatInterval.make(Math.NaN, 1) / FloatInterval.make(-1, 1);
-		Math.isNaN(f.lower) == true; // NaN divident taints everything
-		Math.isNaN(f.upper) == true; // NaN divident taints everything
+		Math.isNaN(f.lower) == true; // NaN dividend taints everything
+		Math.isNaN(f.upper) == true; // NaN dividend taints everything
 	}
 
 	function spec_neg() {
