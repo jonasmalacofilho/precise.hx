@@ -1,0 +1,5 @@
+dump/
+out/
+
+perf*
+mandelbrot*.ppm

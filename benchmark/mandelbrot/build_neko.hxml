@@ -1,0 +1,17 @@
+--main Mandelbrot
+-D analyzer-optimize
+-D analyzer-const-propagation
+-D analyzer-copy-propagation
+-D analyzer-local-dce
+-D analyzer-fusion
+-D analyzer-user-var-fusion
+-D analyzer-purity-inference
+--each
+
+--neko out/mandelbrot.n
+--next
+
+--class-path ../../lib
+-D precise
+-D dump=pretty
+--neko out/mandelbrot_fpi.n

@@ -1,0 +1,19 @@
+--main Mandelbrot
+-D analyzer-optimize
+-D analyzer-const-propagation
+-D analyzer-copy-propagation
+-D analyzer-local-dce
+-D analyzer-fusion
+-D analyzer-user-var-fusion
+-D analyzer-purity-inference
+--each
+
+--hl out/hlc/mandelbrot.c
+--cmd gcc -O3 -o out/hlc/mandelbrot -I out/hlc out/hlc/mandelbrot.c -lhl -g
+--next
+
+--class-path ../../lib
+-D precise
+-D dump=pretty
+--hl out/hlc_fpi/mandelbrot_fpi.c
+--cmd gcc -O3 -o out/hlc_fpi/mandelbrot_fpi -I out/hlc_fpi out/hlc_fpi/mandelbrot_fpi.c -lhl -g
