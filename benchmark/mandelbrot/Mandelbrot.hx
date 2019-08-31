@@ -73,8 +73,9 @@ class Mandelbrot {
 					var vi = valI * valI - valJ * valJ + offsetI;
 					var vj = 2.0 * valI * valJ + offsetJ;
 					#if precise
-						valI.blit(vi);
-						valJ.blit(vj);
+						// optimization
+						valI.assign(vi);
+						valJ.assign(vj);
 					#else
 						valI = vi;
 						valJ = vj;
