@@ -285,13 +285,12 @@ class FloatIntervalTests extends utest.Test {
 		(a / 1).upper == a.upper + ulp(a.upper);
 	}
 
-	function spec_comparisons()
-	{
-		FloatInterval.make(3, 4) > FloatInterval.make(1, 2);
-		FloatInterval.make(3, 4) >= FloatInterval.make(1, 2);
-		!(FloatInterval.make(3, 4) == FloatInterval.make(1, 2));
-		!(FloatInterval.make(3, 4) <= FloatInterval.make(1, 2));
+	function spec_comparisons() {
 		!(FloatInterval.make(3, 4) < FloatInterval.make(1, 2));
+		!(FloatInterval.make(3, 4) <= FloatInterval.make(1, 2));
+		!(FloatInterval.make(3, 4) == FloatInterval.make(1, 2));
+		FloatInterval.make(3, 4) >= FloatInterval.make(1, 2);
+		FloatInterval.make(3, 4) > FloatInterval.make(1, 2);
 		FloatInterval.make(3, 4) != FloatInterval.make(1, 2);
 
 		!(FloatInterval.make(3, 4) < FloatInterval.make(2, 3));
@@ -315,6 +314,19 @@ class FloatIntervalTests extends utest.Test {
 		!(FloatInterval.make(3, 4) > FloatInterval.make(4, 5));
 		FloatInterval.make(3, 4) != FloatInterval.make(4, 5);
 
+/**
+	Since all FloatInterval operations are inlined to avoid allocations, the stack size on this
+	function can get quite large, at least as far as neko is concerned (MAX_STACK_PER_FUNCTION
+	is 128).
+
+	Simply to avoid generating a invalid neko module because of this, split the function in two
+	in a non-semantic point.
+**/
+#if neko
+	}
+
+	function spec_comparisons_part2() {
+#end
 		FloatInterval.make(3, 4) < FloatInterval.make(5, 6);
 		FloatInterval.make(3, 4) <= FloatInterval.make(5, 6);
 		!(FloatInterval.make(3, 4) == FloatInterval.make(5, 6));
@@ -322,17 +334,17 @@ class FloatIntervalTests extends utest.Test {
 		!(FloatInterval.make(3, 4) > FloatInterval.make(5, 6));
 		FloatInterval.make(3, 4) != FloatInterval.make(5, 6);
 
-		FloatInterval.fromFloat(3) > 2;
-		FloatInterval.fromFloat(3) >= 2;
-		!(FloatInterval.fromFloat(3) == 2);
-		!(FloatInterval.fromFloat(3) <= 2);
 		!(FloatInterval.fromFloat(3) < 2);
+		!(FloatInterval.fromFloat(3) <= 2);
+		!(FloatInterval.fromFloat(3) == 2);
+		FloatInterval.fromFloat(3) >= 2;
+		FloatInterval.fromFloat(3) > 2;
 		FloatInterval.fromFloat(3) != 2;
 
 		!(FloatInterval.fromFloat(3) < 3);
-		FloatInterval.fromFloat(3) >= 3;
-		FloatInterval.fromFloat(3) == 3;
 		FloatInterval.fromFloat(3) <= 3;
+		FloatInterval.fromFloat(3) == 3;
+		FloatInterval.fromFloat(3) >= 3;
 		!(FloatInterval.fromFloat(3) > 3);
 		!(FloatInterval.fromFloat(3) != 3);
 
