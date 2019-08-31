@@ -31,7 +31,11 @@ typedef FloatType = Float;
 #end
 
 class Mandelbrot {
+#if neko
+	static inline var SIZE = 1;
+#else
 	static inline var SIZE = 25;
+#end
 	static inline var MAX_ITERATIONS = 1000;
 	static inline var MAX_RAD = 1 << 16;
 	static inline var width = 35 * SIZE;
