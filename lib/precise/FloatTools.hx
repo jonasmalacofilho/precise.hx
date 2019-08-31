@@ -61,10 +61,29 @@ class FloatTools {
 
 		Additionally, from this definition and for finite X (Muller, 2005):
 
-				 X = RN(x) ⇒ |X − x| ≤ 1/2×ulp(X)
-			   |X - x| < 1/2×ulp(X) does not imply X = RN(x)
-			       X ∈ {RD(x), RU(x)} ⇒ |X − x| ≤ ulp(X)
-			|X − x| < ulp(X) does not imply X ∈ {RD(x), RU(x)}
+					  X = RN(x) ⇒ |X − x| ≤ 1/2×ulp(X)
+				   |X - x| < 1/2×ulp(X) does not imply X = RN(x)
+				       X ∈ {RD(x), RU(x)} ⇒ |X − x| ≤ ulp(X)
+				 |X − x| < ulp(X) does not imply X ∈ {RD(x), RU(x)}
+
+		The implemntation manipulates the binary represation of the FP number.  For this, is
+		useful to recal that, assuming little endianess (and all APIs used garantee little
+		endianess regardless of the platform), the memory layout of a double precision
+		floating point number is:
+
+			      63  62       52  51                                    0
+			     [s][  b. exp.  ][               fraction                ]
+			     | SEEEEEEE| EEEEFFFF| FFFFFFFF| ... | FFFFFFFF| FFFFFFFF|
+			     | byte[7] | byte[6] | byte[5] | ... | byte[1] | byte[0] |
+			     |         int32[1]         ...         int32[0]         |
+
+		When computing and returning the resulting value of ulp(X), there are four cases to
+		consider:
+
+		1. Both X and ulp(X) are normal and finite
+		2. X is normal and finite, but ulp(X) will be subnormal
+		3. X is not finite
+		4. X is already subnormal
 
 		Goldberg (1991).  What every computer scientist should know about floating-point
 		arithmetic.
@@ -78,38 +97,49 @@ class FloatTools {
 		aided design and manufacturing (section 4.8.2, algorithm 4.2).
 		http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 	**/
+	@:access(haxe.Int64)
 	public static function ulp(x:Float):Float {
-		/**
-			Use a Bytes object to manipulate the Float in binary; note that
-			Bytes.getDouble assumes little endianess.
-
-			63  62       52  51                                    0
-			[s][  b. exp.  ][               fraction                ]
-			| SEEEEEEE| EEEEFFFF| FFFFFFFF| ... | FFFFFFFF| FFFFFFFF|
-			| byte[7] | byte[6] | byte[5] | ... | byte[1] | byte[0] |
-		**/
-
-		var bytes = toBytes(x, false);
-
-		// isolate the biased exponent, but keep it left (up) shifted by 4 bits
-		var exp = 0x7ff0 & bytes.getUInt16(6);
-
-		// ulp = 2^(E)*2^(-52) and 52 << 4 = 0x0340
-		bytes.fill(0, 8, 0);
-		if (exp == 0x7ff0) { // ulp of non finite x
-			// inefficient, but focuses code and performance on the more common paths
-			return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
-		} else if (exp > 0x0340) { // normal ulp
-			bytes.setUInt16(6, exp - 0x0340);
-		} else if (exp > 0) { // subnormal ulp, but normal x
-			var e1 = (exp >> 4) - 1;
-			var pos = e1 >> 3;
-			var bit = e1 % 8;
-			bytes.set(pos, 1 << bit);
-		} else { // subnormal x
-			bytes.set(0, 1);
-		}
-		return bytes.getDouble(0);
+		#if (!hl || precise.force_fast_ulp) // FIXME this path breaks hlc | -O3
+			var tmp:haxe.Int64 = haxe.io.FPHelper.doubleToI64(x);
+			var bexp = (tmp.high >> 20) & 0x7ff;
+			if (bexp > 52 && bexp != 0x7ff) { // normal ulp
+				tmp.set_high((bexp - 52) << 20);
+				tmp.set_low(0);
+			} else if (bexp > 0 && bexp != 0x7ff) { // subnormal ulp, but normal x
+				var uexp = bexp - 1;
+				tmp.set_high(0);
+				tmp.set_low(1 << (uexp % 32));
+				if (uexp > 32) {
+					tmp.set_high(tmp.low);
+					tmp.set_low(0);
+				}
+			} else if (bexp == 0x7ff) { // ulp of non finite x
+				// inefficient, but focuses code and performance on the more common paths
+				return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
+			} else { // subnormal x
+				tmp.set_high(0);
+				tmp.set_low(1);
+			}
+			return haxe.io.FPHelper.i64ToDouble(tmp.low, tmp.high);
+		#else
+			var tmp:haxe.io.Bytes = toBytes(x, false);
+			var lbexp = 0x7ff0 & tmp.getUInt16(6); // left shifted biased exponent
+			tmp.fill(0, 8, 0);
+			if (lbexp == 0x7ff0) { // ulp of non finite x
+				// inefficient, but focuses code and performance on the more common paths
+				return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
+			} else if (lbexp > 0x0340) { // normal ulp (note: 0x034 == 52)
+				tmp.setUInt16(6, lbexp - 0x0340);
+			} else if (lbexp > 0) { // subnormal ulp, but normal x
+				var e1 = (lbexp >> 4) - 1;
+				var pos = e1 >> 3;
+				var bit = e1 % 8;
+				tmp.set(pos, 1 << bit);
+			} else { // subnormal x
+				tmp.set(0, 1);
+			}
+			return tmp.getDouble(0);
+		#end
 	}
 
 	/**

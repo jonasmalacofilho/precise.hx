@@ -9,11 +9,12 @@
 --each
 
 --hl out/hlc/mandelbrot.c
---cmd gcc -O3 -o out/hlc/mandelbrot -I out/hlc out/hlc/mandelbrot.c -lhl -g
+--cmd gcc -O2 -o out/hlc/mandelbrot -I out/hlc out/hlc/mandelbrot.c -lhl -g
 --next
 
 --class-path ../../lib
 -D precise
+-D precise.force-fast-ulp
 -D dump=pretty
 --hl out/hlc_fpi/mandelbrot_fpi.c
---cmd gcc -O3 -o out/hlc_fpi/mandelbrot_fpi -I out/hlc_fpi out/hlc_fpi/mandelbrot_fpi.c -lhl -g
+--cmd gcc -O2 -o out/hlc_fpi/mandelbrot_fpi -I out/hlc_fpi out/hlc_fpi/mandelbrot_fpi.c -lhl -g

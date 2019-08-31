@@ -27,6 +27,7 @@ class FloatToolsTests extends utest.Test {
 	}
 
 	function spec_subnormal_ulp() {
+		// FIXME test ulp > buffer atom size and other cases
 		var x = 2.2250738585072014e-307;
 		var ulp = x.ulp();
 		x.repr() ==
