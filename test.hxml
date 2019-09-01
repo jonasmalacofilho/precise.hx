@@ -1,2 +1,4 @@
 utest_setup.hxml
+-D dump=pretty
+-D dump-path=out/dump
 --interp

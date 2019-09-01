@@ -110,6 +110,35 @@ class FloatIntervalTests extends utest.Test {
 		k.upper == 12 + ulp(12);
 	}
 
+	@:access(precise.FloatInterval.impl)
+	function spec_add_derivates()
+	{
+		var one = FloatInterval.fromFloat(1);
+
+		var a = one.copy();
+		var a0impl = a.impl;
+		var ares = a += 1;
+		ares.lower == (one + 1).lower;
+		ares.upper == (one + 1).upper;
+		a.impl == a0impl;
+
+		var b = one.copy();
+		var b0impl = b.impl;
+		var bres = b++;
+		bres.lower == one.lower;
+		bres.upper == one.upper;
+		b.impl == b0impl;
+		b.lower == (one + 1).lower;
+		b.upper == (one + 1).upper;
+
+		var c = one.copy();
+		var c0impl = c.impl;
+		var cres = ++c;
+		cres.lower == (one + 1).lower;
+		cres.upper == (one + 1).upper;
+		c.impl == c0impl;
+	}
+
 	function spec_sub() {
 		var a = FloatInterval.fromFloat(1);
 		var b = FloatInterval.fromFloat(1e-32);
@@ -147,6 +176,35 @@ class FloatIntervalTests extends utest.Test {
 		k.upper == 6 + ulp(6);
 	}
 
+	@:access(precise.FloatInterval.impl)
+	function spec_sub_derivates()
+	{
+		var one = FloatInterval.fromFloat(1);
+
+		var a = one.copy();
+		var a0impl = a.impl;
+		var ares = a -= 1;
+		ares.lower == (one - 1).lower;
+		ares.upper == (one - 1).upper;
+		a.impl == a0impl;
+
+		var b = one.copy();
+		var b0impl = b.impl;
+		var bres = b--;
+		bres.lower == one.lower;
+		bres.upper == one.upper;
+		b.impl == b0impl;
+		b.lower == (one - 1).lower;
+		b.upper == (one - 1).upper;
+
+		var c = one.copy();
+		var c0impl = c.impl;
+		var cres = --c;
+		cres.lower == (one - 1).lower;
+		cres.upper == (one - 1).upper;
+		c.impl == c0impl;
+	}
+
 	function spec_mult() {
 		var a = FloatInterval.fromFloat(1);
 		var b = FloatInterval.fromFloat(1e-32);
@@ -182,6 +240,19 @@ class FloatIntervalTests extends utest.Test {
 		var k = FloatInterval.make(-8, -6) * FloatInterval.make(-2, 4);
 		k.lower == -32 - ulp(32);
 		k.upper == 16 + ulp(16);
+	}
+
+	@:access(precise.FloatInterval.impl)
+	function spec_compound_mult()
+	{
+		var one = FloatInterval.fromFloat(1);
+
+		var a = one.copy();
+		var a0impl = a.impl;
+		var ares = a *= 1;
+		ares.lower == (one * 1).lower;
+		ares.upper == (one * 1).upper;
+		a.impl == a0impl;
 	}
 
 	function spec_div() {
@@ -231,6 +302,19 @@ class FloatIntervalTests extends utest.Test {
 		var n = FloatInterval.make(-8, 6) / FloatInterval.make(-4, -2);
 		n.lower == -3 - ulp(3);
 		n.upper == 4 + ulp(4);
+	}
+
+	@:access(precise.FloatInterval.impl)
+	function spec_compound_div()
+	{
+		var one = FloatInterval.fromFloat(1);
+
+		var a = one.copy();
+		var a0impl = a.impl;
+		var ares = a /= 1;
+		ares.lower == (one / 1).lower;
+		ares.upper == (one / 1).upper;
+		a.impl == a0impl;
 	}
 
 	function spec_div_by_possible_zero() {

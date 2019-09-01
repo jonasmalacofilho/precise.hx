@@ -22,6 +22,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 	public var mean(get, never):Float;
 	public var error(get, never):Float;
 	public var relerror(get, never):Float;
+	var impl(get, never):FloatIntervalImpl;
 
 	inline function new(interval) {
 		this = interval;
@@ -45,6 +46,10 @@ abstract FloatInterval(FloatIntervalImpl) {
 
 	inline function get_relerror() {
 		return error / mean;
+	}
+
+	inline function get_impl() {
+		return this;
 	}
 
 	inline static function makeFast(surelyLower:Float, surelyUpper:Float) {
