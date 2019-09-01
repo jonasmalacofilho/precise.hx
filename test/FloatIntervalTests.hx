@@ -455,4 +455,39 @@ class FloatIntervalTests extends utest.Test {
 		!(FloatInterval.fromFloat(3) > 4);
 		FloatInterval.fromFloat(3) != 4;
 	}
+
+	/**
+		Haxe doesn't cmurrently support overloading the assign – @:op(a = b) –
+		operator.  Thus we're always working on references.
+
+		This has both semantic and efficiency implications.  This example shows the
+		effects of both, and also allows the inspection of the AST (if its dump has
+		been enabled).
+
+		It will have to be updated once @:op(a = b) is allowed and used in
+		FloatInterval.
+	**/
+	@:access(precise.FloatInterval.impl)
+	function test_assign_semantics() {
+		var a = (1:FloatInterval), a0impl = a.impl;
+		var b = a;
+		var c = a.copy();
+		a += 3;
+		equals(a0impl, a.impl);
+		equals(a0impl, b.impl); // b still points to a
+		notEquals(a0impl, c.impl);
+
+		var d = (5:FloatInterval), d0impl = d.impl;
+		var e = (7:FloatInterval), e0impl = e.impl;
+		for (i in 0...1000) { // hack: prevent this loop from unrolling
+			d = d*d + i;
+			e.assign(e*e - i);
+			if (i > 5)
+				break;
+		}
+		notEquals(d0impl, d); // updating d caused allocations
+		equals(e0impl, e);
+
+		pass('[hack] don\'t optmize away, ${a.error + d.error + e.error}');
+	}
 }
