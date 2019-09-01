@@ -104,6 +104,10 @@ class FloatIntervalTests extends utest.Test {
 		var j = FloatInterval.fromFloat(Math.POSITIVE_INFINITY) + Math.NEGATIVE_INFINITY;
 		Math.isNaN(j.lower) == true;
 		Math.isNaN(j.upper) == true;
+
+		var k = FloatInterval.make(6, 8) + FloatInterval.make(2, 4);
+		k.lower == 8 - ulp(8);
+		k.upper == 12 + ulp(12);
 	}
 
 	function spec_sub() {
@@ -137,6 +141,10 @@ class FloatIntervalTests extends utest.Test {
 		var j = FloatInterval.fromFloat(Math.POSITIVE_INFINITY) - Math.POSITIVE_INFINITY;
 		Math.isNaN(j.lower) == true;
 		Math.isNaN(j.upper) == true;
+
+		var k = FloatInterval.make(6, 8) - FloatInterval.make(2, 4);
+		k.lower == 2 - ulp(2);
+		k.upper == 6 + ulp(6);
 	}
 
 	function spec_mult() {
@@ -170,6 +178,10 @@ class FloatIntervalTests extends utest.Test {
 		var j = FloatInterval.fromFloat(0) * Math.POSITIVE_INFINITY;
 		Math.isNaN(j.lower) == true;
 		Math.isNaN(j.upper) == true;
+
+		var k = FloatInterval.make(-8, -6) * FloatInterval.make(-2, 4);
+		k.lower == -32 - ulp(32);
+		k.upper == 16 + ulp(16);
 	}
 
 	function spec_div() {
@@ -215,6 +227,10 @@ class FloatIntervalTests extends utest.Test {
 		var m = FloatInterval.fromFloat(0) / 0;
 		Math.isNaN(m.lower) == true;
 		Math.isNaN(m.upper) == true;
+
+		var n = FloatInterval.make(-8, 6) / FloatInterval.make(-4, -2);
+		n.lower == -3 - ulp(3);
+		n.upper == 4 + ulp(4);
 	}
 
 	function spec_div_by_possible_zero() {
