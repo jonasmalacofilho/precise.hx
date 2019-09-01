@@ -64,10 +64,14 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return makeFast(number, number);
 	}
 
-	inline public function assign(x:FloatInterval):FloatInterval {
-		this.lo = x.lower;
-		this.up = x.upper;
+	inline function assignInternal(surelyLower:Float, surelyUpper:Float) {
+		this.lo = surelyLower;
+		this.up = surelyUpper;
 		return new FloatInterval(this);
+	}
+
+	inline public function assign(x:FloatInterval):FloatInterval {
+		return assignInternal(x.lower, x.upper);
 	}
 
 	@:op(a + b) @:commutative inline public function add(rhs:FloatInterval) {
@@ -135,6 +139,67 @@ abstract FloatInterval(FloatIntervalImpl) {
 	@:op(a != b) inline public static function neq(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.lower < rhs.lower || lhs.upper > rhs.upper ||
 				rhs.lower < lhs.lower || rhs.upper > lhs.upper;
+	}
+
+	@:op(a += b) inline public function assignAdd(rhs:FloatInterval) {
+		var lo = this.lo + rhs.lower;
+		var up = this.up + rhs.upper;
+		return assignInternal(lo - ulp(lo), up + ulp(up));
+	}
+
+	@:op(a -= b) inline public function assignSub(rhs:FloatInterval) {
+		var lo = this.lo - rhs.upper;
+		var up = this.up - rhs.lower;
+		this.lo = lo - ulp(lo);
+		this.up = up + ulp(up);
+		return assignInternal(lo - ulp(lo), up + ulp(up));
+	}
+
+	@:op(a *= b) inline public function assignMult(rhs:FloatInterval) {
+		var ll = this.lo * rhs.lower;
+		var lu = this.lo * rhs.upper;
+		var ul = this.up * rhs.lower;
+		var uu = this.up * rhs.upper;
+		var lo = min(ll, lu, ul, uu);
+		var up = max(ll, lu, ul, uu);
+		return assignInternal(lo - ulp(lo), up + ulp(up));
+	}
+
+	@:op(a /= b) inline public function assignDiv(rhs:FloatInterval) {
+		if (rhs.lower < 0 && rhs.upper > 0) {
+			if ((this.lo <= 0 && this.up >= 0) || !Math.isFinite(this.lo) ||
+					!Math.isFinite(this.up)) {
+				return assignInternal(Math.NaN, Math.NaN);
+			}
+			return assignInternal(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
+		}
+		var ll = this.lo / rhs.lower;
+		var lu = this.lo / rhs.upper;
+		var ul = this.up / rhs.lower;
+		var uu = this.up / rhs.upper;
+		var lo = min(ll, lu, ul, uu);
+		var up = max(ll, lu, ul, uu);
+		return assignInternal(lo - ulp(lo), up + ulp(up));
+	}
+
+	@:op(++a) inline public function preIncrement() {
+		return assignAdd(1);
+	}
+
+	@:op(a++) inline public function postIncrement() {
+		var tmp = copy();
+		preIncrement();
+		return tmp;
+	}
+
+	@:op(--a) inline public function preDecrement() {
+		return assignSub(1);
+	}
+
+	@:op(a--) inline public function postDecrement() {
+		var tmp = copy();
+		preDecrement();
+		return tmp;
 	}
 
 	@:to public function toString() {
