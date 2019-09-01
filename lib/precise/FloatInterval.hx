@@ -75,41 +75,27 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	@:op(a + b) @:commutative inline public function add(rhs:FloatInterval) {
-		var lo = this.lo + rhs.lower;
-		var up = this.up + rhs.upper;
-		return makeFast(lo - ulp(lo), up + ulp(up));
+		var tmp = copy();
+		tmp += rhs;
+		return tmp;
 	}
 
 	@:op(a - b) inline public static function sub(lhs:FloatInterval, rhs:FloatInterval) {
-		var lo = lhs.lower - rhs.upper;
-		var up = lhs.upper - rhs.lower;
-		return makeFast(lo - ulp(lo), up + ulp(up));
+		var tmp = lhs.copy();
+		tmp -= rhs;
+		return tmp;
 	}
 
 	@:op(a * b) @:commutative inline public function mult(rhs:FloatInterval) {
-		var ll = this.lo * rhs.lower;
-		var lu = this.lo * rhs.upper;
-		var ul = this.up * rhs.lower;
-		var uu = this.up * rhs.upper;
-		var lo = min(ll, lu, ul, uu);
-		var up = max(ll, lu, ul, uu);
-		return makeFast(lo - ulp(lo), up + ulp(up));
+		var tmp = copy();
+		tmp *= rhs;
+		return tmp;
 	}
 
 	@:op(a / b) inline public static function div(lhs:FloatInterval, rhs:FloatInterval) {
-		if (rhs.lower < 0 && rhs.upper > 0) {
-			if ((lhs.lower <= 0 && lhs.upper >= 0) || !Math.isFinite(lhs.lower) ||
-					!Math.isFinite(lhs.upper))
-				return fromFloat(Math.NaN);
-			return makeFast(Math.NEGATIVE_INFINITY, Math.POSITIVE_INFINITY);
-		}
-		var ll = lhs.lower / rhs.lower;
-		var lu = lhs.lower / rhs.upper;
-		var ul = lhs.upper / rhs.lower;
-		var uu = lhs.upper / rhs.upper;
-		var lo = min(ll, lu, ul, uu);
-		var up = max(ll, lu, ul, uu);
-		return makeFast(lo - ulp(lo), up + ulp(up));
+		var tmp = lhs.copy();
+		tmp /= rhs;
+		return tmp;
 	}
 
 	@:op(-a) inline public function neg() {
