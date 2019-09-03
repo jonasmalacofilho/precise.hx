@@ -31,17 +31,18 @@ typedef FloatType = Float;
 #end
 
 class Mandelbrot {
-#if neko
+	#if neko
 	static inline var SIZE = 1;
-#else
+	#else
 	static inline var SIZE = 25;
-#end
+	#end
+
 	static inline var MAX_ITERATIONS = 1000;
-	static inline var MAX_RAD = 1 << 16;
+	static inline var MAX_RAD = 4;
 	static inline var width = 35 * SIZE;
 	static inline var height = 20 * SIZE;
 
-	public static function main() {
+	static function main() {
 		var t0 = now();
 		inline function elapsed() {
 			return Math.round((now() - t0) * 1000);
@@ -67,23 +68,20 @@ class Mandelbrot {
 				var offsetJ = y * scale - 1.0;
 				var valI:FloatType = 0.0;
 				var valJ:FloatType = 0.0;
-				#if precise
-				while ((valI * valI + valJ * valJ).lower < MAX_RAD &&
+				while (valI * valI + valJ * valJ <= MAX_RAD &&
 						iteration < MAX_ITERATIONS) {
-				#else
-				while (valI * valI + valJ * valJ < MAX_RAD &&
-						iteration < MAX_ITERATIONS) {
-				#end
 					var vi = valI * valI - valJ * valJ + offsetI;
 					var vj = 2.0 * valI * valJ + offsetJ;
+
+					// optimization: avoid allocs when assigning FPIs
 					#if precise
-						// optimization
-						valI.assign(vi);
-						valJ.assign(vj);
+					valI.assign(vi);
+					valJ.assign(vj);
 					#else
-						valI = vi;
-						valJ = vj;
+					valI = vi;
+					valJ = vj;
 					#end
+
 					iteration++;
 				}
 				image[outPixel++] = palette[iteration];
@@ -94,22 +92,22 @@ class Mandelbrot {
 		var time = elapsed();
 		trace('Mandelbrot $width x $height: $time ms, $totalIterations iterations');
 		trace('${Math.round(time/totalIterations * 1e7) / 10} ns/iteration');
+
 		#if sys
-			var header = 'P6 $width $height 255\n';
-			var buffer = haxe.io.Bytes.alloc(header.length + width * height * 3);
-			var pos = header.length;
-			buffer.blit(0, haxe.io.Bytes.ofString(header), 0, pos);
-			for (pixel in image) {
-				buffer.set(pos++, pixel.r);
-				buffer.set(pos++, pixel.g);
-				buffer.set(pos++, pixel.b);
-			}
-			sys.io.File.saveBytes("mandelbrot.ppm", buffer);
+		var header = 'P6 $width $height 255\n';
+		var buffer = haxe.io.Bytes.alloc(header.length + width * height * 3);
+		var pos = header.length;
+		buffer.blit(0, haxe.io.Bytes.ofString(header), 0, pos);
+		for (pixel in image) {
+			buffer.set(pos++, pixel.r);
+			buffer.set(pos++, pixel.g);
+			buffer.set(pos++, pixel.b);
+		}
+		sys.io.File.saveBytes("mandelbrot.ppm", buffer);
 		#end
 	}
 
-	public static function createPalette(inFraction:Float)
-	{
+	static function createPalette(inFraction:Float) {
 		var r = Std.int(inFraction * 255);
 		var g = Std.int((1 - inFraction) * 255);
 		var b = Std.int((0.5 - Math.abs(inFraction - 0.5)) * 2 * 255);
@@ -122,23 +120,19 @@ abstract RGB(Int) {
 	public var g(get, never):Int;
 	public var b(get, never):Int;
 
-	inline public function new(inR:Int, inG:Int, inB:Int)
-	{
+	inline public function new(inR:Int, inG:Int, inB:Int) {
 		this = (inR << 16) | (inG << 8) | inB;
 	}
 
-	inline function get_r()
-	{
+	inline function get_r() {
 		return (this & 0xff0000) >> 16;
 	}
 
-	inline function get_g()
-	{
+	inline function get_g() {
 		return (this & 0xff00) >> 8;
 	}
 
-	inline function get_b()
-	{
+	inline function get_b() {
 		return this & 0xff;
 	}
 }
