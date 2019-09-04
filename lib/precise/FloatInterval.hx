@@ -83,51 +83,51 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return assign(add(rhs));
 	}
 
-	@:op(a -= b) inline public function assignSub(rhs:FloatInterval) {
+	@:op(a -= b) inline function assignSub(rhs:FloatInterval) {
 		return assign(sub(cast this, rhs));
 	}
 
-	@:op(a *= b) inline public function assignMult(rhs:FloatInterval) {
+	@:op(a *= b) inline function assignMult(rhs:FloatInterval) {
 		return assign(mult(rhs));
 	}
 
-	@:op(a /= b) inline public function assignDiv(rhs:FloatInterval) {
+	@:op(a /= b) inline function assignDiv(rhs:FloatInterval) {
 		return assign(div(cast this, rhs));
 	}
 
-	@:op(++a) inline public function preIncrement() {
+	@:op(++a) inline function preIncrement() {
 		return assignAdd(1);
 	}
 
-	@:op(a++) inline public function postIncrement() {
+	@:op(a++) inline function postIncrement() {
 		var tmp = copy();
 		preIncrement();
 		return tmp;
 	}
 
-	@:op(--a) inline public function preDecrement() {
+	@:op(--a) inline function preDecrement() {
 		return assignSub(1);
 	}
 
-	@:op(a--) inline public function postDecrement() {
+	@:op(a--) inline function postDecrement() {
 		var tmp = copy();
 		preDecrement();
 		return tmp;
 	}
 
-	@:op(a + b) @:commutative inline public function add(rhs:FloatInterval) {
+	@:op(a + b) @:commutative inline function add(rhs:FloatInterval) {
 		var lo = this.lo + rhs.lower;
 		var up = this.up + rhs.upper;
 		return makeFast(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a - b) inline public static function sub(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a - b) inline static function sub(lhs:FloatInterval, rhs:FloatInterval) {
 		var lo = lhs.lower - rhs.upper;
 		var up = lhs.upper - rhs.lower;
 		return makeFast(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a * b) @:commutative inline public function mult(rhs:FloatInterval) {
+	@:op(a * b) @:commutative inline function mult(rhs:FloatInterval) {
 		var ll = this.lo * rhs.lower;
 		var lu = this.lo * rhs.upper;
 		var ul = this.up * rhs.lower;
@@ -137,7 +137,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return makeFast(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(a / b) inline public static function div(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a / b) inline static function div(lhs:FloatInterval, rhs:FloatInterval) {
 		if (rhs.lower < 0 && rhs.upper > 0) {
 			if ((lhs.lower <= 0 && lhs.upper >= 0) || !Math.isFinite(lhs.lower) ||
 					!Math.isFinite(lhs.upper)) {
@@ -154,31 +154,31 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return makeFast(lo - ulp(lo), up + ulp(up));
 	}
 
-	@:op(-a) inline public function neg() {
+	@:op(-a) inline function neg() {
 		return makeFast(-this.up, -this.lo);
 	}
 
-	@:op(a < b) inline public static function lt(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a < b) inline static function lt(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.upper < rhs.lower;
 	}
 
-	@:op(a <= b) inline public static function lte(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a <= b) inline static function lte(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.lower <= rhs.upper;
 	}
 
-	@:op(a >= b) inline public static function gte(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a >= b) inline static function gte(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.lower >= rhs.upper || lhs.upper >= rhs.lower;
 	}
 
-	@:op(a > b) inline public static function gt(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a > b) inline static function gt(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.lower > rhs.upper;
 	}
 
-	@:op(a == b) inline public static function eq(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a == b) inline static function eq(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.upper >= rhs.lower && lhs.lower <= rhs.upper;
 	}
 
-	@:op(a != b) inline public static function neq(lhs:FloatInterval, rhs:FloatInterval) {
+	@:op(a != b) inline static function neq(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.lower < rhs.lower || lhs.upper > rhs.upper ||
 				rhs.lower < lhs.lower || rhs.upper > lhs.upper;
 	}

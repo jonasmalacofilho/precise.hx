@@ -18,28 +18,28 @@ abstract Currency(FloatInterval) to FloatInterval {
 		return new Currency(number);
 	}
 
-	@:op(a + b) @:commutative public function add(rhs:Currency) {
+	@:op(a + b) @:commutative function add(rhs:Currency) {
 		var res = new Currency(this + rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
 		return res;
 	}
 
-	@:op(a - b) public static function sub(lhs:Currency, rhs:Currency) {
+	@:op(a - b) static function sub(lhs:Currency, rhs:Currency) {
 		var res = new Currency((lhs : FloatInterval) - rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
 		return res;
 	}
 
-	@:op(a * b) public function mult(rhs:FloatInterval) {
+	@:op(a * b) function mult(rhs:FloatInterval) {
 		var res = new Currency(this * rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
 		return res;
 	}
 
-	@:op(a / b) public function div(rhs:FloatInterval) {
+	@:op(a / b) function div(rhs:FloatInterval) {
 		var res = new Currency(this / rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
