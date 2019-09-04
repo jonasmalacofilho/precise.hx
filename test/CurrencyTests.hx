@@ -19,7 +19,7 @@ class CurrencyTests extends utest.Test {
 		var sum = min;
 		var i = 0;
 		try {
-			while (true) {
+			while (i < 1e6) {
 				sum = sum * interest + min;
 				i++;
 			}
