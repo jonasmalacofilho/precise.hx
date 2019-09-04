@@ -69,14 +69,10 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return makeFast(number, number);
 	}
 
-	inline function assignInternal(surelyLower:Float, surelyUpper:Float) {
-		this.lo = surelyLower;
-		this.up = surelyUpper;
-		return new FloatInterval(this);
-	}
-
 	inline public function assign(x:FloatInterval):FloatInterval {
-		return assignInternal(x.lower, x.upper);
+		this.lo = x.lower;
+		this.up = x.upper;
+		return new FloatInterval(this);
 	}
 
 	@:op(a += b) inline function assignAdd(rhs:FloatInterval) {
