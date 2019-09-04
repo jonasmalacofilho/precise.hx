@@ -6,7 +6,7 @@ abstract Currency(FloatInterval) to FloatInterval {
 		this = value;
 	}
 
-	public static function parse(text:String) {
+	public static inline function parse(text:String) {
 		var float = Std.parseFloat(text);
 		if (!Math.isFinite(float))
 			throw 'Currency only defined for finite numbers, but argument $float';
@@ -14,32 +14,32 @@ abstract Currency(FloatInterval) to FloatInterval {
 		return new Currency(FloatInterval.make(float - ulp, float + ulp));
 	}
 
-	@:from public static function fromFloat(number:Float) {
+	@:from public static inline function fromFloat(number:Float) {
 		return new Currency(number);
 	}
 
-	@:op(a + b) @:commutative function add(rhs:Currency) {
+	@:op(a + b) @:commutative inline function add(rhs:Currency) {
 		var res = new Currency(this + rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
 		return res;
 	}
 
-	@:op(a - b) static function sub(lhs:Currency, rhs:Currency) {
+	@:op(a - b) static inline function sub(lhs:Currency, rhs:Currency) {
 		var res = new Currency((lhs : FloatInterval) - rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
 		return res;
 	}
 
-	@:op(a * b) function mult(rhs:FloatInterval) {
+	@:op(a * b) inline function mult(rhs:FloatInterval) {
 		var res = new Currency(this * rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
 		return res;
 	}
 
-	@:op(a / b) function div(rhs:FloatInterval) {
+	@:op(a / b) inline function div(rhs:FloatInterval) {
 		var res = new Currency(this / rhs);
 		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
 			CurrentFlags.max_error_handler(res);
