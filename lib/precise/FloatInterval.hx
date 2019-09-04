@@ -134,7 +134,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	@:op(a / b) inline static function div(lhs:FloatInterval, rhs:FloatInterval) {
-		if (rhs.lower < 0 && rhs.upper > 0) {
+		if (rhs.lower < 0 && rhs.upper > 0) {  // FIXME causes allocations
 			if ((lhs.lower <= 0 && lhs.upper >= 0) || !Math.isFinite(lhs.lower) ||
 					!Math.isFinite(lhs.upper)) {
 				return fromFloat(Math.NaN);

@@ -19,35 +19,37 @@ abstract Currency(FloatInterval) to FloatInterval {
 	}
 
 	@:op(a + b) @:commutative inline function add(rhs:Currency) {
-		var res = new Currency(this + rhs);
-		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
-			CurrentFlags.max_error_handler(res);
-		return res;
+		return checkAndCast(this + rhs);
 	}
 
 	@:op(a - b) static inline function sub(lhs:Currency, rhs:Currency) {
-		var res = new Currency((lhs : FloatInterval) - rhs);
-		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
-			CurrentFlags.max_error_handler(res);
-		return res;
+		return checkAndCast((lhs:FloatInterval) - rhs);
 	}
 
 	@:op(a * b) inline function mult(rhs:FloatInterval) {
-		var res = new Currency(this * rhs);
-		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
-			CurrentFlags.max_error_handler(res);
-		return res;
+		return checkAndCast(this * rhs);
 	}
 
 	@:op(a / b) inline function div(rhs:FloatInterval) {
-		var res = new Currency(this / rhs);
-		if (CurrentFlags.max_error != null && res.error > CurrentFlags.max_error)
-			CurrentFlags.max_error_handler(res);
-		return res;
+		return checkAndCast(this / rhs);
 	}
 
 	@:to public inline function toString() {
-		return Std.string(this.mean);  // FIXME round
+		return Std.string(this.mean);
+	}
+
+	/**
+		Check that FPI error is bellow threshold and cast the result
+
+		This is optimized for the case where the error is indeed bellow the threshold, or
+		that this check has been disabled.  Because the handler will be overriden at runtime
+		and can't be inlined, it will receive a copy of the value.  This allows the fast
+		path to avoid allocations.
+	**/
+	static inline function checkAndCast(x:FloatInterval, ?pos:haxe.PosInfos) {
+		if (CurrentFlags.max_error != null && x.error > CurrentFlags.max_error)
+			CurrentFlags.max_error_handler(new Currency(x.copy()), pos);
+		return new Currency(x);
 	}
 }
 
