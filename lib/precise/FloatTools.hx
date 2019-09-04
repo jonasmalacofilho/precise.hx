@@ -8,39 +8,35 @@ package precise;
 class FloatTools {
 	/**
 		Return the binary encoding of a Float in a Bytes object
-
-		The choice of std calls used assumes that the most relevant target is neko.
-		Regardless, compatibility with other targets is garanteed (as long as the std calls
-		behave as documented).
 	**/
+	#if (neko && !neko_v21 && haxe_ver >= 3.2)
 	public static function toBytes(x:Float, bigEndian = false):haxe.io.Bytes {
 		/**
-			On Neko (!neko_v21):
+			Haxe APIs on Neko are currently implemented with std.ndll::double_bytes:
 
-			 - Bytes.setDouble -> FPHelper._double_bytes
-				-> std.ndll::double_bytes
-			 - BytesOutput.writeDouble -> FPHelper.doubleToI64
-				-> std.ndll::double_bytes
+			 - Bytes.setDouble -> FPHelper._double_bytes -> std.ndll::double_bytes
+			 - BytesOutput.writeDouble -> FPHelper.doubleToI64 -> std.ndll::double_bytes
 
-			Note: as of 4.0.0-rc.1+93044746a, neko_v21 doesn't produce working builds,
-			and is currently untestd on upstream.
+			Note: as of 4.0.0-rc.1+93044746a, Haxe is not tested with -D neko_v21, and
+			enabling this flag doesn't produce working builds.
 		**/
-		#if (neko && !neko_v21 && haxe_ver >= 3.2)
-			var data = @:privateAccess haxe.io.FPHelper._double_bytes(x, bigEndian);
-			return haxe.io.Bytes.ofData(untyped data);
-		#else
-			if (!bigEndian) {
-				var bytes = haxe.io.Bytes.alloc(8);
-				bytes.setDouble(0, x);
-				return bytes;
-			} else {
-				var tmp = new haxe.io.BytesOutput();
-				tmp.bigEndian = bigEndian;
-				tmp.writeDouble(x);
-				return tmp.getBytes();
-			}
-		#end
+		var data = @:privateAccess haxe.io.FPHelper._double_bytes(x, bigEndian);
+		return haxe.io.Bytes.ofData(untyped data);
 	}
+	#else
+	public static function toBytes(x:Float, bigEndian = false):haxe.io.Bytes {
+		if (!bigEndian) {
+			var bytes = haxe.io.Bytes.alloc(8);
+			bytes.setDouble(0, x);
+			return bytes;
+		} else {
+			var tmp = new haxe.io.BytesOutput();
+			tmp.bigEndian = bigEndian;
+			tmp.writeDouble(x);
+			return tmp.getBytes();
+		}
+	}
+	#end
 
 	/**
 		Compute the unit-in-the-last-place (ULP) of a Float
@@ -97,50 +93,52 @@ class FloatTools {
 		aided design and manufacturing (section 4.8.2, algorithm 4.2).
 		http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 	**/
+	#if (!hl || precise.force_fast_ulp) // FIXME hl: breaks -O3 and thread safety
 	@:access(haxe.Int64)
 	public static function ulp(x:Float):Float {
-		#if (!hl || precise.force_fast_ulp) // FIXME this path breaks hlc | -O3
-			var tmp:haxe.Int64 = haxe.io.FPHelper.doubleToI64(x);
-			var bexp = (tmp.high >> 20) & 0x7ff;
-			if (bexp > 52 && bexp != 0x7ff) { // normal ulp
-				tmp.set_high((bexp - 52) << 20);
+		var tmp:haxe.Int64 = haxe.io.FPHelper.doubleToI64(x);
+		var bexp = (tmp.high >> 20) & 0x7ff;
+		if (bexp > 52 && bexp != 0x7ff) { // normal ulp
+			tmp.set_high((bexp - 52) << 20);
+			tmp.set_low(0);
+		} else if (bexp > 0 && bexp != 0x7ff) { // subnormal ulp, but normal x
+			var uexp = bexp - 1;
+			tmp.set_high(0);
+			tmp.set_low(1 << (uexp % 32));
+			if (uexp > 32) {
+				tmp.set_high(tmp.low);
 				tmp.set_low(0);
-			} else if (bexp > 0 && bexp != 0x7ff) { // subnormal ulp, but normal x
-				var uexp = bexp - 1;
-				tmp.set_high(0);
-				tmp.set_low(1 << (uexp % 32));
-				if (uexp > 32) {
-					tmp.set_high(tmp.low);
-					tmp.set_low(0);
-				}
-			} else if (bexp == 0x7ff) { // ulp of non finite x
-				// inefficient, but focuses code and performance on the more common paths
-				return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
-			} else { // subnormal x
-				tmp.set_high(0);
-				tmp.set_low(1);
 			}
-			return haxe.io.FPHelper.i64ToDouble(tmp.low, tmp.high);
-		#else
-			var tmp:haxe.io.Bytes = toBytes(x, false);
-			var lbexp = 0x7ff0 & tmp.getUInt16(6); // left shifted biased exponent
-			tmp.fill(0, 8, 0);
-			if (lbexp == 0x7ff0) { // ulp of non finite x
-				// inefficient, but focuses code and performance on the more common paths
-				return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
-			} else if (lbexp > 0x0340) { // normal ulp (note: 0x034 == 52)
-				tmp.setUInt16(6, lbexp - 0x0340);
-			} else if (lbexp > 0) { // subnormal ulp, but normal x
-				var e1 = (lbexp >> 4) - 1;
-				var pos = e1 >> 3;
-				var bit = e1 % 8;
-				tmp.set(pos, 1 << bit);
-			} else { // subnormal x
-				tmp.set(0, 1);
-			}
-			return tmp.getDouble(0);
-		#end
+		} else if (bexp == 0x7ff) { // ulp of non finite x
+			// inefficient, but focuses code and performance on the more common paths
+			return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
+		} else { // subnormal x
+			tmp.set_high(0);
+			tmp.set_low(1);
+		}
+		return haxe.io.FPHelper.i64ToDouble(tmp.low, tmp.high);
 	}
+	#else
+	public static function ulp(x:Float):Float {
+		var tmp:haxe.io.Bytes = toBytes(x, false);
+		var lbexp = 0x7ff0 & tmp.getUInt16(6); // left shifted biased exponent
+		tmp.fill(0, 8, 0);
+		if (lbexp == 0x7ff0) { // ulp of non finite x
+			// inefficient, but focuses code and performance on the more common paths
+			return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
+		} else if (lbexp > 0x0340) { // normal ulp (note: 0x034 == 52)
+			tmp.setUInt16(6, lbexp - 0x0340);
+		} else if (lbexp > 0) { // subnormal ulp, but normal x
+			var e1 = (lbexp >> 4) - 1;
+			var pos = e1 >> 3;
+			var bit = e1 % 8;
+			tmp.set(pos, 1 << bit);
+		} else { // subnormal x
+			tmp.set(0, 1);
+		}
+		return tmp.getDouble(0);
+	}
+	#end
 
 	/**
 		Return a human-readable representation of a Float's binary encoding
