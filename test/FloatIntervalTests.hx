@@ -433,28 +433,6 @@ class FloatIntervalTests extends utest.Test {
 		!(FloatInterval.make(3, 4) >= FloatInterval.make(5, 6));
 		!(FloatInterval.make(3, 4) > FloatInterval.make(5, 6));
 		FloatInterval.make(3, 4) != FloatInterval.make(5, 6);
-
-		!(FloatInterval.fromFloat(3) < 2);
-		!(FloatInterval.fromFloat(3) <= 2);
-		!(FloatInterval.fromFloat(3) == 2);
-		FloatInterval.fromFloat(3) >= 2;
-		FloatInterval.fromFloat(3) > 2;
-		FloatInterval.fromFloat(3) != 2;
-
-		!(FloatInterval.fromFloat(3) < 3);
-		FloatInterval.fromFloat(3) <= 3;
-		FloatInterval.fromFloat(3) == 3;
-		FloatInterval.fromFloat(3) >= 3;
-		!(FloatInterval.fromFloat(3) > 3);
-		!(FloatInterval.fromFloat(3) != 3);
-
-		FloatInterval.fromFloat(3) < 4;
-		FloatInterval.fromFloat(3) <= 4;
-		!(FloatInterval.fromFloat(3) == 4);
-		!(FloatInterval.fromFloat(3) >= 4);
-		!(FloatInterval.fromFloat(3) > 4);
-		FloatInterval.fromFloat(3) != 4;
-
 #if neko
 	}
 
@@ -510,6 +488,25 @@ class FloatIntervalTests extends utest.Test {
 				isTrue((lhs != rhs) == !(lhs == rhs),
 						'expected nte == !eq (lhs=$lhs, rhs=$rhs)');
 			}
+		}
+
+		// exact fp numbers can use fpi comparisons without issue
+		var fpiThree = FloatInterval.fromFloat(3);
+		for (rhs in exact) {
+			isTrue((fpiThree < rhs) == (3 < rhs),
+					'expected (fpi(3) < $rhs) == ${3 < rhs}');
+			isTrue((fpiThree <= rhs) == (3 <= rhs),
+					'expected (fpi(3) <= $rhs) == ${3 <= rhs}');
+			isTrue((fpiThree == rhs) == (3 == rhs),
+					'expected (fpi(3) == $rhs) == ${3 == rhs}');
+			isTrue((rhs == fpiThree) == (3 == rhs),
+					'expected ($rhs == fpi(3)) == ${3 == rhs}');
+			isTrue((fpiThree >= rhs) == (3 >= rhs),
+					'expected (fpi(3) >= $rhs) == ${3 >= rhs}');
+			isTrue((fpiThree > rhs) == (3 > rhs),
+					'expected (fpi(3) > $rhs) == ${3 > rhs}');
+			isTrue((fpiThree != rhs) == (3 != rhs),
+					'expected (fpi(3) != $rhs) == ${3 != rhs}');
 		}
 	}
 
