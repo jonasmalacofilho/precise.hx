@@ -163,19 +163,19 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	@:op(a == b) inline static function eq(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.upper >= rhs.lower && lhs.lower <= rhs.upper;
+		return lhs.lower >= rhs.lower && lhs.upper <= rhs.upper;
 	}
 
 	@:op(a <= b) inline static function lte(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.lower <= rhs.upper;
+		return lhs.upper <= rhs.upper;
 	}
 
 	@:op(a >= b) inline static function gte(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.upper >= rhs.lower;
+		return lhs.lower >= rhs.lower;
 	}
 
 	@:op(a != b) inline static function neq(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.upper < rhs.lower || lhs.lower > rhs.upper;
+		return lhs.lower < rhs.lower || lhs.upper > rhs.upper;
 	}
 
 	@:to public function toString() {
