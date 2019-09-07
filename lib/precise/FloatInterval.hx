@@ -175,8 +175,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	@:op(a != b) inline static function neq(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.lower < rhs.lower || lhs.upper > rhs.upper ||
-				rhs.lower < lhs.lower || rhs.upper > lhs.upper;
+		return lhs.upper < rhs.lower || lhs.lower > rhs.upper;
 	}
 
 	@:to public function toString() {

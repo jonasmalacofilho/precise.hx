@@ -398,21 +398,21 @@ class FloatIntervalTests extends utest.Test {
 		FloatInterval.make(3, 4) == FloatInterval.make(2, 3);
 		FloatInterval.make(3, 4) >= FloatInterval.make(2, 3);
 		!(FloatInterval.make(3, 4) > FloatInterval.make(2, 3));
-		FloatInterval.make(3, 4) != FloatInterval.make(2, 3);
+		!(FloatInterval.make(3, 4) != FloatInterval.make(2, 3));
 
 		FloatInterval.make(3, 4) == FloatInterval.make(3, 4);
 		!(FloatInterval.make(3, 4) != FloatInterval.make(3, 4));
 		FloatInterval.make(3 + .1, 4 - .1) == FloatInterval.make(3, 4);
-		FloatInterval.make(3 + .1, 4 - .1) != FloatInterval.make(3, 4);
+		!(FloatInterval.make(3 + .1, 4 - .1) != FloatInterval.make(3, 4));
 		FloatInterval.make(3, 4) == FloatInterval.make(3 + .1, 4 - .1);
-		FloatInterval.make(3, 4) != FloatInterval.make(3 + .1, 4 - .1);
+		!(FloatInterval.make(3, 4) != FloatInterval.make(3 + .1, 4 - .1));
 
 		!(FloatInterval.make(3, 4) < FloatInterval.make(4, 5));
 		FloatInterval.make(3, 4) <= FloatInterval.make(4, 5);
 		FloatInterval.make(3, 4) == FloatInterval.make(4, 5);
 		FloatInterval.make(3, 4) >= FloatInterval.make(4, 5);
 		!(FloatInterval.make(3, 4) > FloatInterval.make(4, 5));
-		FloatInterval.make(3, 4) != FloatInterval.make(4, 5);
+		!(FloatInterval.make(3, 4) != FloatInterval.make(4, 5));
 
 #if neko
 	}
@@ -423,7 +423,7 @@ class FloatIntervalTests extends utest.Test {
 		(MAX_STACK_PER_FUNCTION is 128).
 
 		Simply to avoid generating a invalid neko module because of this, split the function
-		in two parts.
+		into several parts that each fit within the Neko stack size limit.
 	**/
 	function spec_comparisons_part2() {
 #end
@@ -454,6 +454,41 @@ class FloatIntervalTests extends utest.Test {
 		!(FloatInterval.fromFloat(3) >= 4);
 		!(FloatInterval.fromFloat(3) > 4);
 		FloatInterval.fromFloat(3) != 4;
+
+#if neko
+	}
+
+	// see comment for spec_comparisons_part2
+	function spec_comparisons_part3() {
+#end
+
+		!(FloatInterval.make(3, 4) < 2);
+		!(FloatInterval.make(3, 4) <= 2);
+		!(FloatInterval.make(3, 4) == 2);
+		FloatInterval.make(3, 4) >= 2;
+		FloatInterval.make(3, 4) > 2;
+		FloatInterval.make(3, 4) != 2;
+
+		!(FloatInterval.make(3, 4) < 3);
+		FloatInterval.make(3, 4) <= 3;
+		FloatInterval.make(3, 4) == 3;
+		FloatInterval.make(3, 4) >= 3;
+		!(FloatInterval.make(3, 4) > 3);
+		!(FloatInterval.make(3, 4) != 3);
+
+		!(FloatInterval.make(3, 4) < 4);
+		FloatInterval.make(3, 4) <= 4;
+		FloatInterval.make(3, 4) == 4;
+		FloatInterval.make(3, 4) >= 4;
+		!(FloatInterval.make(3, 4) > 4);
+		!(FloatInterval.make(3, 4) != 4);
+
+		FloatInterval.make(3, 4) < 5;
+		FloatInterval.make(3, 4) <= 5;
+		!(FloatInterval.make(3, 4) == 5);
+		!(FloatInterval.make(3, 4) >= 5);
+		!(FloatInterval.make(3, 4) > 5);
+		FloatInterval.make(3, 4) != 5;
 	}
 
 	/**
