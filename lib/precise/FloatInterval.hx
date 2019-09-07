@@ -163,7 +163,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	@:op(a >= b) inline static function gte(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.lower >= rhs.upper || lhs.upper >= rhs.lower;
+		return lhs.upper >= rhs.lower;
 	}
 
 	@:op(a > b) inline static function gt(lhs:FloatInterval, rhs:FloatInterval) {
