@@ -414,17 +414,17 @@ class FloatIntervalTests extends utest.Test {
 		!(FloatInterval.make(3, 4) > FloatInterval.make(4, 5));
 		FloatInterval.make(3, 4) != FloatInterval.make(4, 5);
 
-/**
-	Since all FloatInterval operations are inlined to avoid allocations, the stack size on this
-	function can get quite large, at least as far as neko is concerned (MAX_STACK_PER_FUNCTION
-	is 128).
-
-	Simply to avoid generating a invalid neko module because of this, split the function in two
-	in a non-semantic point.
-**/
 #if neko
 	}
 
+	/**
+		Since all FloatInterval operations are inlined to avoid allocations, the stack size
+		on this function can get quite large, at least as far as neko is concerned
+		(MAX_STACK_PER_FUNCTION is 128).
+
+		Simply to avoid generating a invalid neko module because of this, split the function
+		in two parts.
+	**/
 	function spec_comparisons_part2() {
 #end
 		FloatInterval.make(3, 4) < FloatInterval.make(5, 6);
