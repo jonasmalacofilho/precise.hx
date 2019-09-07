@@ -158,20 +158,20 @@ abstract FloatInterval(FloatIntervalImpl) {
 		return lhs.upper < rhs.lower;
 	}
 
-	@:op(a <= b) inline static function lte(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.lower <= rhs.upper;
-	}
-
-	@:op(a >= b) inline static function gte(lhs:FloatInterval, rhs:FloatInterval) {
-		return lhs.upper >= rhs.lower;
-	}
-
 	@:op(a > b) inline static function gt(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.lower > rhs.upper;
 	}
 
 	@:op(a == b) inline static function eq(lhs:FloatInterval, rhs:FloatInterval) {
 		return lhs.upper >= rhs.lower && lhs.lower <= rhs.upper;
+	}
+
+	@:op(a <= b) inline static function lte(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.lower <= rhs.upper;
+	}
+
+	@:op(a >= b) inline static function gte(lhs:FloatInterval, rhs:FloatInterval) {
+		return lhs.upper >= rhs.lower;
 	}
 
 	@:op(a != b) inline static function neq(lhs:FloatInterval, rhs:FloatInterval) {
