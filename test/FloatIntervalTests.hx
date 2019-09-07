@@ -413,7 +413,6 @@ class FloatIntervalTests extends utest.Test {
 		FloatInterval.make(3, 4) >= FloatInterval.make(4, 5);
 		!(FloatInterval.make(3, 4) > FloatInterval.make(4, 5));
 		!(FloatInterval.make(3, 4) != FloatInterval.make(4, 5));
-
 #if neko
 	}
 
@@ -422,7 +421,7 @@ class FloatIntervalTests extends utest.Test {
 		on this function can get quite large, at least as far as neko is concerned
 		(MAX_STACK_PER_FUNCTION is 128).
 
-		Simply to avoid generating a invalid neko module because of this, split the function
+		Simply to avoid generating a invalid Neko module because of this, split the function
 		into several parts that each fit within the Neko stack size limit.
 	**/
 	function spec_comparisons_part2() {
@@ -511,7 +510,7 @@ class FloatIntervalTests extends utest.Test {
 	}
 
 	/**
-		Haxe doesn't cmurrently support overloading the assign – @:op(a = b) –
+		Haxe doesn't currently support overloading the assign – @:op(a = b) –
 		operator.  Thus we're always working on references.
 
 		This has both semantic and efficiency implications.  This example shows the
@@ -542,6 +541,6 @@ class FloatIntervalTests extends utest.Test {
 		notEquals(d0impl, d); // updating d caused allocations
 		equals(e0impl, e);
 
-		pass('[hack] don\'t optmize away, ${a.error + d.error + e.error}');
+		pass('[hack] don\'t optimize away, ${a.error + d.error + e.error}');
 	}
 }
