@@ -491,6 +491,28 @@ class FloatIntervalTests extends utest.Test {
 		FloatInterval.make(3, 4) != 5;
 	}
 
+	function spec_comparison_properties() {
+		var exact = [2, 3, 4, 5];
+		var fpis = [
+			for (lower in exact)
+				for (upper in exact)
+					if (lower <= upper)
+						FloatInterval.make(lower, upper)
+		];
+
+		// the set of comparisons is coherent
+		for (lhs in fpis) {
+			for (rhs in fpis) {
+				isTrue((lhs <= rhs) == (lhs < rhs || lhs == rhs),
+						'expected lte == lt || eq (lhs=$lhs, rhs=$rhs)');
+				isTrue((lhs >= rhs) == (lhs > rhs || lhs == rhs),
+						'expected gte == gt || eq (lhs=$lhs, rhs=$rhs)');
+				isTrue((lhs != rhs) == !(lhs == rhs),
+						'expected nte == !eq (lhs=$lhs, rhs=$rhs)');
+			}
+		}
+	}
+
 	/**
 		Haxe doesn't cmurrently support overloading the assign – @:op(a = b) –
 		operator.  Thus we're always working on references.
