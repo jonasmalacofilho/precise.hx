@@ -190,6 +190,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	static function min(x:Float, y:Float, w:Float, z:Float) {
+		// FIXME has unspecified behavior with NaNs
 		var ret = x;
 		if (y < ret)
 			ret = y;
@@ -201,6 +202,7 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	static function max(x:Float, y:Float, w:Float, z:Float) {
+		// FIXME has unspecified behavior with NaNs
 		var ret = x;
 		if (y > ret)
 			ret = y;

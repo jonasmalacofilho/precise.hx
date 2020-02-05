@@ -24,6 +24,7 @@ class CurrencyTests extends utest.Test {
 				i++;
 			}
 		} catch (err:Dynamic) {
+			// FIXME (hl) sum stuck at initial min value
 			trace('[info] survived $i iterations; last successful sum = $sum');
 			trace('[info] error was: $err');
 		}
