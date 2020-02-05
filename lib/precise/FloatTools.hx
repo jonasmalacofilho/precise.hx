@@ -9,8 +9,16 @@ class FloatTools {
 	/**
 		Return the binary encoding of a Float in a Bytes object
 	**/
-	#if (neko && !neko_v21 && haxe_ver >= 3.2)
-	public static function toBytes(x:Float, bigEndian = false):haxe.io.Bytes {
+	public static inline function toBytes(x:Float, bigEndian = false):haxe.io.Bytes {
+		#if (neko && !neko_v21 && haxe_ver >= 3.2)
+		return nekoFastFloatToBytes(x, bigEndian);
+		#else
+		return safeFloatToBytes(x, bigEndian);
+		#end
+	}
+
+	#if neko
+	static function nekoFastFloatToBytes(x:Float, bigEndian = false):haxe.io.Bytes {
 		/**
 			Haxe APIs on Neko are currently implemented with std.ndll::double_bytes:
 
@@ -23,8 +31,9 @@ class FloatTools {
 		var data = @:privateAccess haxe.io.FPHelper._double_bytes(x, bigEndian);
 		return haxe.io.Bytes.ofData(untyped data);
 	}
-	#else
-	public static function toBytes(x:Float, bigEndian = false):haxe.io.Bytes {
+	#end
+
+	static function safeFloatToBytes(x:Float, bigEndian = false):haxe.io.Bytes {
 		if (!bigEndian) {
 			var bytes = haxe.io.Bytes.alloc(8);
 			bytes.setDouble(0, x);
@@ -36,7 +45,6 @@ class FloatTools {
 			return tmp.getBytes();
 		}
 	}
-	#end
 
 	/**
 		Compute the unit-in-the-last-place (ULP) of a Float
@@ -93,9 +101,17 @@ class FloatTools {
 		aided design and manufacturing (section 4.8.2, algorithm 4.2).
 		http://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node46.html
 	**/
-	#if (!hl || precise.force_fast_ulp) // FIXME hl: breaks -O3 and thread safety
+	public static inline function ulp(x:Float):Float {
+		#if (!hl || precise.force_fast_ulp)
+		return fastUlp(x);
+		#else
+		return safeUlp(x);
+		#end
+	}
+
 	@:access(haxe.Int64)
-	public static function ulp(x:Float):Float {
+	static function fastUlp(x:Float):Float {
+		// FIXME (hl) breaks thread safety and -O3
 		var tmp:haxe.Int64 = haxe.io.FPHelper.doubleToI64(x);
 		var bexp = (tmp.high >> 20) & 0x7ff;
 		if (bexp > 52 && bexp != 0x7ff) { // normal ulp
@@ -118,8 +134,8 @@ class FloatTools {
 		}
 		return haxe.io.FPHelper.i64ToDouble(tmp.low, tmp.high);
 	}
-	#else
-	public static function ulp(x:Float):Float {
+
+	static function safeUlp(x:Float):Float {
 		var tmp:haxe.io.Bytes = toBytes(x, false);
 		var lbexp = 0x7ff0 & tmp.getUInt16(6); // left shifted biased exponent
 		tmp.fill(0, 8, 0);
@@ -138,7 +154,6 @@ class FloatTools {
 		}
 		return tmp.getDouble(0);
 	}
-	#end
 
 	/**
 		Return a human-readable representation of a Float's binary encoding
