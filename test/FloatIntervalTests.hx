@@ -393,86 +393,75 @@ class FloatIntervalTests extends utest.Test {
 		(a / 1).upper == a.upper + ulp(a.upper);
 	}
 
-	function spec_comparisons() {
+	function spec_comparisons_lt_lte() {
 		!(FloatInterval.make(3, 4) < FloatInterval.make(1, 2));
-		!(FloatInterval.make(3, 4) <= FloatInterval.make(1, 2));
-		!(FloatInterval.make(3, 4) == FloatInterval.make(1, 2));
-		FloatInterval.make(3, 4) >= FloatInterval.make(1, 2);
-		FloatInterval.make(3, 4) > FloatInterval.make(1, 2);
-		FloatInterval.make(3, 4) != FloatInterval.make(1, 2);
-
 		!(FloatInterval.make(3, 4) < FloatInterval.make(2, 3));
-		FloatInterval.make(3, 4) <= FloatInterval.make(2, 3);
-		FloatInterval.make(3, 4) == FloatInterval.make(2, 3);
-		FloatInterval.make(3, 4) >= FloatInterval.make(2, 3);
-		!(FloatInterval.make(3, 4) > FloatInterval.make(2, 3));
-		!(FloatInterval.make(3, 4) != FloatInterval.make(2, 3));
-
-		FloatInterval.make(3, 4) == FloatInterval.make(3, 4);
-		!(FloatInterval.make(3, 4) != FloatInterval.make(3, 4));
-		FloatInterval.make(3 + .1, 4 - .1) == FloatInterval.make(3, 4);
-		!(FloatInterval.make(3 + .1, 4 - .1) != FloatInterval.make(3, 4));
-		FloatInterval.make(3, 4) == FloatInterval.make(3 + .1, 4 - .1);
-		!(FloatInterval.make(3, 4) != FloatInterval.make(3 + .1, 4 - .1));
-
 		!(FloatInterval.make(3, 4) < FloatInterval.make(4, 5));
-		FloatInterval.make(3, 4) <= FloatInterval.make(4, 5);
-		FloatInterval.make(3, 4) == FloatInterval.make(4, 5);
-		FloatInterval.make(3, 4) >= FloatInterval.make(4, 5);
-		!(FloatInterval.make(3, 4) > FloatInterval.make(4, 5));
-		!(FloatInterval.make(3, 4) != FloatInterval.make(4, 5));
-#if neko
-	}
-
-	/**
-		Since all FloatInterval operations are inlined to avoid allocations, the stack size
-		on this function can get quite large, at least as far as neko is concerned
-		(MAX_STACK_PER_FUNCTION is 128).
-
-		Simply to avoid generating a invalid Neko module because of this, split the function
-		into several parts that each fit within the Neko stack size limit.
-	**/
-	function spec_comparisons_part2() {
-#end
 		FloatInterval.make(3, 4) < FloatInterval.make(5, 6);
-		FloatInterval.make(3, 4) <= FloatInterval.make(5, 6);
-		!(FloatInterval.make(3, 4) == FloatInterval.make(5, 6));
-		!(FloatInterval.make(3, 4) >= FloatInterval.make(5, 6));
-		!(FloatInterval.make(3, 4) > FloatInterval.make(5, 6));
-		FloatInterval.make(3, 4) != FloatInterval.make(5, 6);
-#if neko
-	}
 
-	// see comment for spec_comparisons_part2
-	function spec_comparisons_part3() {
-#end
+		!(FloatInterval.make(3, 4) <= FloatInterval.make(1, 2));
+		FloatInterval.make(3, 4) <= FloatInterval.make(2, 3);
+		FloatInterval.make(3, 4) <= FloatInterval.make(4, 5);
+		FloatInterval.make(3, 4) <= FloatInterval.make(5, 6);
 
 		!(FloatInterval.make(3, 4) < 2);
-		!(FloatInterval.make(3, 4) <= 2);
-		!(FloatInterval.make(3, 4) == 2);
-		FloatInterval.make(3, 4) >= 2;
-		FloatInterval.make(3, 4) > 2;
-		FloatInterval.make(3, 4) != 2;
-
 		!(FloatInterval.make(3, 4) < 3);
-		FloatInterval.make(3, 4) <= 3;
-		FloatInterval.make(3, 4) == 3;
-		FloatInterval.make(3, 4) >= 3;
-		!(FloatInterval.make(3, 4) > 3);
-		!(FloatInterval.make(3, 4) != 3);
-
 		!(FloatInterval.make(3, 4) < 4);
-		FloatInterval.make(3, 4) <= 4;
-		FloatInterval.make(3, 4) == 4;
-		FloatInterval.make(3, 4) >= 4;
-		!(FloatInterval.make(3, 4) > 4);
-		!(FloatInterval.make(3, 4) != 4);
-
 		FloatInterval.make(3, 4) < 5;
+
+		!(FloatInterval.make(3, 4) <= 2);
+		FloatInterval.make(3, 4) <= 3;
+		FloatInterval.make(3, 4) <= 4;
 		FloatInterval.make(3, 4) <= 5;
-		!(FloatInterval.make(3, 4) == 5);
-		!(FloatInterval.make(3, 4) >= 5);
+	}
+
+	function spec_comparisons_gt_gte() {
+		FloatInterval.make(3, 4) > FloatInterval.make(1, 2);
+		!(FloatInterval.make(3, 4) > FloatInterval.make(2, 3));
+		!(FloatInterval.make(3, 4) > FloatInterval.make(4, 5));
+		!(FloatInterval.make(3, 4) > FloatInterval.make(5, 6));
+
+		FloatInterval.make(3, 4) > 2;
+		!(FloatInterval.make(3, 4) > 3);
+		!(FloatInterval.make(3, 4) > 4);
 		!(FloatInterval.make(3, 4) > 5);
+
+		FloatInterval.make(3, 4) >= FloatInterval.make(1, 2);
+		FloatInterval.make(3, 4) >= FloatInterval.make(2, 3);
+		FloatInterval.make(3, 4) >= FloatInterval.make(4, 5);
+		!(FloatInterval.make(3, 4) >= FloatInterval.make(5, 6));
+
+		FloatInterval.make(3, 4) >= 2;
+		FloatInterval.make(3, 4) >= 3;
+		FloatInterval.make(3, 4) >= 4;
+		!(FloatInterval.make(3, 4) >= 5);
+	}
+
+	function spec_comparisons_eq_neq() {
+		!(FloatInterval.make(3, 4) == FloatInterval.make(1, 2));
+		FloatInterval.make(3, 4) == FloatInterval.make(2, 3);
+		FloatInterval.make(3, 4) == FloatInterval.make(3, 4);
+		FloatInterval.make(3 + .1, 4 - .1) == FloatInterval.make(3, 4);
+		FloatInterval.make(3, 4) == FloatInterval.make(3 + .1, 4 - .1);
+		FloatInterval.make(3, 4) == FloatInterval.make(4, 5);
+		!(FloatInterval.make(3, 4) == FloatInterval.make(5, 6));
+
+		FloatInterval.make(3, 4) != FloatInterval.make(1, 2);
+		!(FloatInterval.make(3, 4) != FloatInterval.make(2, 3));
+		!(FloatInterval.make(3, 4) != FloatInterval.make(3, 4));
+		!(FloatInterval.make(3 + .1, 4 - .1) != FloatInterval.make(3, 4));
+		!(FloatInterval.make(3, 4) != FloatInterval.make(3 + .1, 4 - .1));
+		!(FloatInterval.make(3, 4) != FloatInterval.make(4, 5));
+		FloatInterval.make(3, 4) != FloatInterval.make(5, 6);
+
+		!(FloatInterval.make(3, 4) == 2);
+		FloatInterval.make(3, 4) == 3;
+		FloatInterval.make(3, 4) == 4;
+		!(FloatInterval.make(3, 4) == 5);
+
+		FloatInterval.make(3, 4) != 2;
+		!(FloatInterval.make(3, 4) != 3);
+		!(FloatInterval.make(3, 4) != 4);
 		FloatInterval.make(3, 4) != 5;
 	}
 
@@ -485,7 +474,7 @@ class FloatIntervalTests extends utest.Test {
 						FloatInterval.make(lower, upper)
 		];
 
-		// the set of comparisons is coherent
+		// the set of comparisons is coherent with boolean logic
 		for (lhs in fpis) {
 			for (rhs in fpis) {
 				isTrue((lhs <= rhs) == (lhs < rhs || lhs == rhs),
