@@ -1,3 +1,4 @@
 utest_setup.hxml
 --hl out/main.hl
+-D precise.force_fast_ulp
 --cmd hl out/main.hl

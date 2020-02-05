@@ -111,7 +111,8 @@ class FloatTools {
 
 	@:access(haxe.Int64)
 	static function fastUlp(x:Float):Float {
-		// FIXME (hl) breaks thread safety and -O3
+		// FIXME (hl) breaks thread safety
+		// FIXME (hlc) breakes -O3
 		var tmp:haxe.Int64 = haxe.io.FPHelper.doubleToI64(x);
 		var bexp = (tmp.high >> 20) & 0x7ff;
 		if (bexp > 52 && bexp != 0x7ff) { // normal ulp
