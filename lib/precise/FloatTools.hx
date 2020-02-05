@@ -7,6 +7,16 @@ package precise;
 **/
 class FloatTools {
 	/**
+		Faster and inlineable version of Math.isNaN
+
+		Only safe if the target correctly implements comparisons between NaN and
+		NEGATIVE_INFINITY.
+	**/
+	public static inline function fastIsNaN(x:Float) {
+		return !(x >= Math.NEGATIVE_INFINITY);
+	}
+
+	/**
 		Return the binary encoding of a Float in a Bytes object
 	**/
 	public static inline function toBytes(x:Float, bigEndian = false):haxe.io.Bytes {
@@ -128,7 +138,7 @@ class FloatTools {
 			}
 		} else if (bexp == 0x7ff) { // ulp of non finite x
 			// inefficient, but focuses code and performance on the more common paths
-			return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
+			return fastIsNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
 		} else { // subnormal x
 			tmp.set_high(0);
 			tmp.set_low(1);
@@ -142,7 +152,7 @@ class FloatTools {
 		tmp.fill(0, 8, 0);
 		if (lbexp == 0x7ff0) { // ulp of non finite x
 			// inefficient, but focuses code and performance on the more common paths
-			return Math.isNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
+			return fastIsNaN(x) ? Math.NaN : Math.pow(2, 1023 - 52);
 		} else if (lbexp > 0x0340) { // normal ulp (note: 0x034 == 52)
 			tmp.setUInt16(6, lbexp - 0x0340);
 		} else if (lbexp > 0) { // subnormal ulp, but normal x

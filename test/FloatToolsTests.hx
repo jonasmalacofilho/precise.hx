@@ -5,6 +5,20 @@ using precise.FloatTools;
 class FloatToolsTests extends utest.Test {
 	static inline var MIN_POSITIVE_SUBNORMAL = 4.9406564584124654e-324; // 2^-1022 × 2^-52
 
+	function spec_fastIsNaN() {
+		Math.NaN.fastIsNaN() == true;
+
+		// we don't trust that targets implement comparisons with NaNs perfectly right
+		(-Math.NaN).fastIsNaN() == true;
+		(0/0).fastIsNaN() == true;
+		(Math.NEGATIVE_INFINITY/Math.POSITIVE_INFINITY).fastIsNaN() == true;
+		(0*Math.NEGATIVE_INFINITY).fastIsNaN() == true;
+		(Math.POSITIVE_INFINITY + Math.NEGATIVE_INFINITY).fastIsNaN() == true;
+		// specifically check that there aren't false negatives around infinity
+		Math.NEGATIVE_INFINITY.fastIsNaN() == false;
+		Math.POSITIVE_INFINITY.fastIsNaN() == false;
+	}
+
 	function spec_repr() {
 		1.repr() ==
 			"0 01111111111 0000000000000000000000000000000000000000000000000000";

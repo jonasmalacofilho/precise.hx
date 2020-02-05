@@ -1,6 +1,7 @@
 package precise;
 
 import precise.FloatTools.ulp;
+import precise.FloatTools.fastIsNaN;
 
 /**
 	Floating point interval (FPI) arithmetic in double precision
@@ -191,22 +192,22 @@ abstract FloatInterval(FloatIntervalImpl) {
 
 	static function min(x:Float, y:Float, w:Float, z:Float) {
 		var ret = x;
-		if (Math.isNaN(y) || y < ret)
+		if (y < ret || fastIsNaN(y))
 			ret = y;
-		if (Math.isNaN(w) || w < ret)
+		if (w < ret || fastIsNaN(w))
 			ret = w;
-		if (Math.isNaN(z) || z < ret)
+		if (z < ret || fastIsNaN(z))
 			ret = z;
 		return ret;
 	}
 
 	static function max(x:Float, y:Float, w:Float, z:Float) {
 		var ret = x;
-		if (Math.isNaN(y) || y > ret)
+		if (y > ret || fastIsNaN(y))
 			ret = y;
-		if (Math.isNaN(w) || w > ret)
+		if (w > ret || fastIsNaN(w))
 			ret = w;
-		if (Math.isNaN(z) || z > ret)
+		if (z > ret || fastIsNaN(z))
 			ret = z;
 		return ret;
 	}
