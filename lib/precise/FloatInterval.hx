@@ -190,25 +190,23 @@ abstract FloatInterval(FloatIntervalImpl) {
 	}
 
 	static function min(x:Float, y:Float, w:Float, z:Float) {
-		// FIXME has unspecified behavior with NaNs
 		var ret = x;
-		if (y < ret)
+		if (Math.isNaN(y) || y < ret)
 			ret = y;
-		if (w < ret)
+		if (Math.isNaN(w) || w < ret)
 			ret = w;
-		if (z < ret)
+		if (Math.isNaN(z) || z < ret)
 			ret = z;
 		return ret;
 	}
 
 	static function max(x:Float, y:Float, w:Float, z:Float) {
-		// FIXME has unspecified behavior with NaNs
 		var ret = x;
-		if (y > ret)
+		if (Math.isNaN(y) || y > ret)
 			ret = y;
-		if (w > ret)
+		if (Math.isNaN(w) || w > ret)
 			ret = w;
-		if (z > ret)
+		if (Math.isNaN(z) || z > ret)
 			ret = z;
 		return ret;
 	}

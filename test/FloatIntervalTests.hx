@@ -221,25 +221,29 @@ class FloatIntervalTests extends utest.Test {
 		f.lower == c.lower;
 		f.upper == c.upper;
 
-		var g = a * Math.POSITIVE_INFINITY;
-		g.lower == Math.POSITIVE_INFINITY;
-		g.upper == Math.POSITIVE_INFINITY;
+		var r = a * Math.POSITIVE_INFINITY;
+		r.lower == Math.POSITIVE_INFINITY;
+		r.upper == Math.POSITIVE_INFINITY;
 
-		var h = a * Math.NEGATIVE_INFINITY;
-		h.lower == Math.NEGATIVE_INFINITY;
-		h.upper == Math.NEGATIVE_INFINITY;
+		var r = a * Math.NEGATIVE_INFINITY;
+		r.lower == Math.NEGATIVE_INFINITY;
+		r.upper == Math.NEGATIVE_INFINITY;
 
-		var i = a * FloatInterval.make(Math.NaN, 1);
-		Math.isNaN(i.lower) == true;
-		Math.isNaN(i.upper) == true;
+		var r = a * FloatInterval.make(Math.NaN, 1);
+		Math.isNaN(r.lower) == true;
+		Math.isNaN(r.upper) == true;
 
-		var j = FloatInterval.fromFloat(0) * Math.POSITIVE_INFINITY;
-		Math.isNaN(j.lower) == true;
-		Math.isNaN(j.upper) == true;
+		var r = a * FloatInterval.make(1, Math.NaN);
+		Math.isNaN(r.lower) == true;
+		Math.isNaN(r.upper) == true;
 
-		var k = FloatInterval.make(-8, -6) * FloatInterval.make(-2, 4);
-		k.lower == -32 - ulp(32);
-		k.upper == 16 + ulp(16);
+		var r = FloatInterval.fromFloat(0) * Math.POSITIVE_INFINITY;
+		Math.isNaN(r.lower) == true;
+		Math.isNaN(r.upper) == true;
+
+		var r = FloatInterval.make(-8, -6) * FloatInterval.make(-2, 4);
+		r.lower == -32 - ulp(32);
+		r.upper == 16 + ulp(16);
 	}
 
 	@:access(precise.FloatInterval.impl)
@@ -271,37 +275,41 @@ class FloatIntervalTests extends utest.Test {
 		f.lower == c.lower;
 		f.upper == c.upper;
 
-		var g = a / Math.POSITIVE_INFINITY;
-		g.lower == -ulp(0);
-		g.upper == ulp(0);
+		var r = a / Math.POSITIVE_INFINITY;
+		r.lower == -ulp(0);
+		r.upper == ulp(0);
 
-		var h = a / Math.NEGATIVE_INFINITY;
-		g.lower == -ulp(0);
-		g.upper == ulp(0);
+		var r = a / Math.NEGATIVE_INFINITY;
+		r.lower == -ulp(0);
+		r.upper == ulp(0);
 
-		var i = Math.POSITIVE_INFINITY / a;
-		i.lower == Math.POSITIVE_INFINITY;
-		i.upper == Math.POSITIVE_INFINITY;
+		var r = Math.POSITIVE_INFINITY / a;
+		r.lower == Math.POSITIVE_INFINITY;
+		r.upper == Math.POSITIVE_INFINITY;
 
-		var j = Math.NEGATIVE_INFINITY / a;
-		j.lower == Math.NEGATIVE_INFINITY;
-		j.upper == Math.NEGATIVE_INFINITY;
+		var r = Math.NEGATIVE_INFINITY / a;
+		r.lower == Math.NEGATIVE_INFINITY;
+		r.upper == Math.NEGATIVE_INFINITY;
 
-		var k = a / FloatInterval.make(Math.NaN, 1);
-		Math.isNaN(k.lower) == true;
-		Math.isNaN(k.upper) == true;
+		var r = a / FloatInterval.make(Math.NaN, 1);
+		Math.isNaN(r.lower) == true;
+		Math.isNaN(r.upper) == true;
 
-		var l = FloatInterval.fromFloat(Math.NEGATIVE_INFINITY) / Math.POSITIVE_INFINITY;
-		Math.isNaN(l.lower) == true;
-		Math.isNaN(l.upper) == true;
+		var r = a / FloatInterval.make(1, Math.NaN);
+		Math.isNaN(r.lower) == true;
+		Math.isNaN(r.upper) == true;
 
-		var m = FloatInterval.fromFloat(0) / 0;
-		Math.isNaN(m.lower) == true;
-		Math.isNaN(m.upper) == true;
+		var r = FloatInterval.fromFloat(Math.NEGATIVE_INFINITY) / Math.POSITIVE_INFINITY;
+		Math.isNaN(r.lower) == true;
+		Math.isNaN(r.upper) == true;
 
-		var n = FloatInterval.make(-8, 6) / FloatInterval.make(-4, -2);
-		n.lower == -3 - ulp(3);
-		n.upper == 4 + ulp(4);
+		var r = FloatInterval.fromFloat(0) / 0;
+		Math.isNaN(r.lower) == true;
+		Math.isNaN(r.upper) == true;
+
+		var r = FloatInterval.make(-8, 6) / FloatInterval.make(-4, -2);
+		r.lower == -3 - ulp(3);
+		r.upper == 4 + ulp(4);
 	}
 
 	@:access(precise.FloatInterval.impl)
