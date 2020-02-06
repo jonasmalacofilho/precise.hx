@@ -478,11 +478,15 @@ class FloatIntervalTests extends utest.Test {
 		for (lhs in fpis) {
 			for (rhs in fpis) {
 				isTrue((lhs <= rhs) == (lhs < rhs || lhs == rhs),
-						'expected lte == lt || eq (lhs=$lhs, rhs=$rhs)');
+						'expected lte == (lt || eq), lhs=$lhs, rhs=$rhs');
 				isTrue((lhs >= rhs) == (lhs > rhs || lhs == rhs),
-						'expected gte == gt || eq (lhs=$lhs, rhs=$rhs)');
+						'expected gte == (gt || eq), lhs=$lhs, rhs=$rhs');
 				isTrue((lhs != rhs) == !(lhs == rhs),
-						'expected nte == !eq (lhs=$lhs, rhs=$rhs)');
+						'expected nte == !eq, lhs=$lhs, rhs=$rhs');
+				isTrue((lhs <= rhs) == !(lhs > rhs),
+						'expected lte == !gt, lhs=$lhs, rhs=$rhs');
+				isTrue((lhs >= rhs) == !(lhs < rhs),
+						'expected gte == !lt, lhs=$lhs, rhs=$rhs');
 			}
 		}
 
